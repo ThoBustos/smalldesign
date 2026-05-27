@@ -1,0 +1,18 @@
+:root {
+  --background: 48 15% 94%;
+  --foreground: 0 0% 2%;
+  --border: 0 0% 4%;
+  --muted: 44 11% 88%;
+  --muted-foreground: 42 4% 43%;
+  --primary: 0 0% 3%;
+  --primary-foreground: 0 0% 100%;
+  --paper: #f4f2ec;
+  --acid: #e7ff27;
+  --blue: #3159f5;
+  --ink: #050505;
+  --soft: #e8e4d9;
+  --muted-text: #77736b;
+  --page-x: clamp(22px, 5vw, 96px);
+  --section-y: clamp(70px, 10vw, 170px);
+  --border-line: 1px solid var(--ink);
+}
