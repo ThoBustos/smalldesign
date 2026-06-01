@@ -157,6 +157,7 @@ function Contact() {
 function StudioFooter() {
   return (
     <footer className="studio-footer">
+      <img src={content.images.hero} alt="" aria-hidden="true" />
       <div className="footer-top">
         <span>© 2026 small.design</span>
         <span className="footer-status">All services are online</span>
