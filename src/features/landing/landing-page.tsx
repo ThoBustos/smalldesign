@@ -163,14 +163,6 @@ function StudioFooter() {
         <span className="footer-status">All services are online</span>
       </div>
       <div className="studio-footer-word">small.design</div>
-      <div className="footer-bottom">
-        <a href={`mailto:${content.email}`}>{content.email}</a>
-        <nav aria-label="Footer navigation">
-          <a href="#work">Work</a>
-          <a href="#method">Method</a>
-          <a href="#contact">Contact</a>
-        </nav>
-      </div>
     </footer>
   );
 }
