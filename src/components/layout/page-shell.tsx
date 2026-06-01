@@ -1,11 +1,5 @@
-import { SiteHeader } from "@/components/layout/site-header";
-import { PlaneDirection } from "@/features/directions/plane-direction";
+import { LandingPage } from "@/features/landing/landing-page";
 
 export function PageShell() {
-  return (
-    <div className="min-h-screen bg-paper text-black">
-      <SiteHeader />
-      <PlaneDirection />
-    </div>
-  );
+  return <LandingPage />;
 }

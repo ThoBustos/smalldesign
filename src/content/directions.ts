@@ -1,8 +1,19 @@
-export const planeDirection = {
-  label: "Direction / The Black Plane",
-  signature: "Signed as an object",
+export const landingContent = {
   headline: "Make the company easier to believe in.",
-  copy: "A monumental, object-led direction where the brand becomes a physical presence: simple, sharp, unavoidable.",
-  image: "/hero/black-plane.png",
+  method: "One strong idea, reduced until it can carry naming, identity, web, product, and launch without noise.",
   services: ["Positioning", "Visual identity", "Product surfaces", "Launch system"],
+  serviceDetails: [
+    { name: "Positioning", signal: "Belief", image: "/hero/service-positioning.png" },
+    { name: "Visual identity", signal: "Signal", image: "/hero/service-identity.png" },
+    { name: "Product surfaces", signal: "System", image: "/hero/service-product.png" },
+    { name: "Launch system", signal: "Release", image: "/hero/service-launch.png" },
+  ],
+  cta: "Give the brand a shape people remember.",
+  studio: "Head of design as a service",
+  email: "hello@small.design",
+  images: {
+    hero: "/hero/monet-screen-sunset.png",
+    hands: "/hero/monet-hands-keyboard.png",
+    critique: "/hero/monet-critique.png",
+  },
 } as const;
