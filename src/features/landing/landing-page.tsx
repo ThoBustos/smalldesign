@@ -72,7 +72,6 @@ function StudioTopBar() {
       <a className="studio-logo" href="#top" aria-label="small.design home">
         small.design
       </a>
-      <p>{content.studio}</p>
       <nav aria-label="Primary">
         <a href="#work">Work</a>
         <a href="#method">Method</a>
@@ -87,7 +86,6 @@ function Hero() {
     <section className="studio-hero hero-interface">
       <GrainOverlay />
       <div className="hero-meta js-hero-reveal">
-        <span>02</span>
         <span>{content.studio}</span>
       </div>
       <h1>
@@ -104,7 +102,7 @@ function Hero() {
 function Method() {
   return (
     <section className="studio-method" id="method">
-      <span className="section-label js-reveal">Method</span>
+      <span className="section-label js-reveal">01 / Belief</span>
       <p className="js-reveal">{content.method}</p>
     </section>
   );
@@ -113,7 +111,7 @@ function Method() {
 function Services() {
   return (
     <section className="studio-services" aria-label="Services">
-      <span className="section-label js-reveal">Services</span>
+      <span className="section-label js-reveal">02 / System</span>
       <div>
         {content.serviceDetails.map((service, index) => (
           <article className="js-reveal" key={service.name}>
@@ -131,6 +129,7 @@ function Services() {
 function Work() {
   return (
     <section className="studio-work" id="work">
+      <span className="section-label js-reveal">03 / Surfaces</span>
       <figure className="js-reveal">
         <img src={content.images.hands} alt="Hand on keyboard with painterly color" />
         <figcaption>Product surface</figcaption>
@@ -146,6 +145,7 @@ function Work() {
 function Contact() {
   return (
     <section className="studio-contact" id="contact">
+      <span className="section-label js-reveal">04 / Signal</span>
       <p className="js-reveal">Retainer model for tech companies that need senior design direction without adding noise.</p>
       <a className="js-reveal" href={`mailto:${content.email}`}>
         {content.cta}
@@ -159,7 +159,6 @@ function StudioFooter() {
     <footer className="studio-footer">
       <div className="footer-top">
         <span>© 2026 small.design</span>
-        <span>Interface Poetry</span>
         <span className="footer-status">All services are online</span>
       </div>
       <div className="studio-footer-word">small.design</div>

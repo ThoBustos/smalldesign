@@ -51,7 +51,7 @@ a {
 .studio-page {
   --paper: #f4f4f0;
   --ink: #050505;
-  --muted: rgba(5, 5, 5, 0.56);
+  --muted: rgba(5, 5, 5, 0.48);
   --line: rgba(5, 5, 5, 0.18);
   --accent: #48a35d;
   background: var(--paper);
@@ -67,7 +67,7 @@ a {
   color: white;
   display: grid;
   gap: 22px;
-  grid-template-columns: minmax(180px, 0.6fr) minmax(220px, 1fr) auto;
+  grid-template-columns: 1fr auto;
   mix-blend-mode: difference;
   padding: 24px clamp(22px, 4vw, 54px);
   pointer-events: none;
@@ -83,15 +83,6 @@ a {
   font-weight: 900;
   line-height: 1;
   pointer-events: auto;
-}
-
-.studio-topbar p {
-  font-size: 0.74rem;
-  font-weight: 800;
-  letter-spacing: 0.01em;
-  margin: 0;
-  pointer-events: auto;
-  text-align: center;
 }
 
 .studio-topbar nav {
@@ -115,8 +106,8 @@ a {
 .hero-meta,
 .hero-note {
   font-size: 0.8rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
+  font-weight: 750;
+  letter-spacing: 0.04em;
   position: relative;
   text-transform: uppercase;
   z-index: 4;
@@ -191,10 +182,11 @@ a {
 .section-label {
   color: var(--muted);
   display: block;
-  font-size: 0.78rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  margin-bottom: clamp(30px, 5vw, 74px);
+  font-size: clamp(0.78rem, 0.95vw, 0.95rem);
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  margin-bottom: clamp(30px, 4vw, 58px);
   text-transform: uppercase;
 }
 
@@ -205,13 +197,20 @@ a {
   padding: clamp(84px, 10vw, 150px) clamp(22px, 5vw, 96px);
 }
 
+.studio-method .section-label,
+.studio-method p {
+  margin-left: auto;
+  margin-right: auto;
+  width: min(100%, 1180px);
+}
+
 .studio-method p {
   font-family: "Bricolage Grotesque", Inter, sans-serif;
-  font-size: clamp(3rem, 7.5vw, 9.2rem);
+  font-size: clamp(3rem, 6.55vw, 8.1rem);
   font-weight: 700;
-  line-height: 0.94;
-  margin: 0;
-  max-width: 1320px;
+  line-height: 0.96;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .studio-services {
@@ -226,8 +225,15 @@ a {
   place-content: center;
 }
 
+.studio-services > div,
 .studio-services .section-label {
-  margin-bottom: 28px;
+  margin-left: auto;
+  margin-right: auto;
+  width: min(100%, 1280px);
+}
+
+.studio-services .section-label {
+  margin-bottom: 30px;
 }
 
 .studio-services article {
@@ -241,6 +247,19 @@ a {
   position: relative;
 }
 
+.studio-services article::before {
+  background: var(--ink);
+  bottom: -1px;
+  content: "";
+  height: 1px;
+  left: 0;
+  position: absolute;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+}
+
 .studio-services article:last-child {
   border-bottom: 1px solid var(--line);
 }
@@ -249,8 +268,8 @@ a {
 .studio-services article p {
   color: var(--muted);
   font-size: 0.82rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
+  font-weight: 750;
+  letter-spacing: 0.04em;
   margin: 0;
   text-transform: uppercase;
 }
@@ -265,7 +284,11 @@ a {
 }
 
 .studio-services article:hover {
-  background: rgba(231, 255, 39, 0.08);
+  background: transparent;
+}
+
+.studio-services article:hover::before {
+  transform: scaleX(1);
 }
 
 .studio-services article:hover h2 {
@@ -312,6 +335,12 @@ a {
   padding: clamp(80px, 10vw, 160px) clamp(22px, 5vw, 96px);
 }
 
+.studio-work .section-label {
+  grid-column: 1 / -1;
+  margin: 0 auto clamp(8px, 1vw, 18px);
+  width: min(100%, 1280px);
+}
+
 .studio-work figure {
   margin: 0;
 }
@@ -335,8 +364,8 @@ a {
 .studio-work figcaption {
   color: var(--muted);
   font-size: 0.78rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
+  font-weight: 750;
+  letter-spacing: 0.04em;
   margin-top: 14px;
   text-transform: uppercase;
 }
@@ -346,15 +375,20 @@ a {
   border-top: 1px solid var(--line);
   display: grid;
   gap: clamp(28px, 5vw, 88px);
-  grid-template-columns: 0.72fr 1fr;
+  grid-template-columns: 0.55fr 1fr;
   min-height: 72vh;
   padding: clamp(80px, 10vw, 150px) clamp(22px, 5vw, 96px);
+}
+
+.studio-contact .section-label {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
 }
 
 .studio-contact p {
   color: var(--muted);
   font-size: clamp(1rem, 1.4vw, 1.35rem);
-  font-weight: 700;
+  font-weight: 650;
   line-height: 1.2;
   margin: 0;
   max-width: 420px;
@@ -368,8 +402,8 @@ a {
 }
 
 .studio-footer {
-  background: linear-gradient(180deg, var(--paper) 0%, #f9f8f3 48%, rgba(43, 74, 43, 0.38) 100%);
-  min-height: 52vh;
+  background: linear-gradient(180deg, var(--paper) 0%, #f9f8f3 42%, rgba(43, 74, 43, 0.44) 100%);
+  min-height: 58vh;
   overflow: hidden;
   padding: clamp(28px, 4vw, 54px) clamp(22px, 5vw, 96px) 0;
   position: relative;
@@ -390,7 +424,7 @@ a {
   color: var(--muted);
   display: flex;
   font-size: 0.92rem;
-  font-weight: 800;
+  font-weight: 700;
   gap: 18px;
   justify-content: space-between;
   position: relative;
@@ -412,10 +446,10 @@ a {
 }
 
 .studio-footer-word {
-  bottom: -0.19em;
-  color: rgba(255, 255, 255, 0.46);
+  bottom: -0.15em;
+  color: rgba(255, 255, 255, 0.58);
   font-family: "Bricolage Grotesque", Inter, sans-serif;
-  font-size: clamp(6.5rem, 21vw, 25rem);
+  font-size: clamp(7.5rem, 24vw, 29rem);
   font-weight: 800;
   left: 50%;
   letter-spacing: -0.04em;
@@ -443,18 +477,18 @@ a {
 
 @media (max-width: 900px) {
   .studio-topbar {
-    grid-template-columns: 1fr auto;
     padding: 18px 22px;
-  }
-
-  .studio-topbar p {
-    display: none;
   }
 
   .hero-interface,
   .studio-work,
   .studio-contact {
     grid-template-columns: 1fr;
+  }
+
+  .studio-contact .section-label,
+  .studio-work .section-label {
+    grid-column: 1;
   }
 
   .hero-float-image {
