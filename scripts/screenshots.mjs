@@ -16,6 +16,7 @@ const page = await browser.newPage();
 for (const [viewportName, viewport] of viewports) {
   await page.setViewportSize(viewport);
   await page.goto("http://localhost:4173/", { waitUntil: "networkidle" });
+  await page.waitForTimeout(4700);
   await page.screenshot({
     path: `${outputDir}/plane-${viewportName}.png`,
     fullPage: false,
