@@ -266,9 +266,11 @@ function Hero() {
         ))}
       </h1>
       <p className="hero-note js-hero-reveal">{content.headline}</p>
-      <div className="hero-cursor-artifact js-hero-reveal" ref={followerRef} aria-hidden="true">
-        <img src={heroZones[activeZone].image} alt="" />
-        <span>{heroZones[activeZone].line}</span>
+      <div className="hero-cursor-artifact" ref={followerRef} aria-hidden="true">
+        <div className="hero-cursor-card js-hero-reveal">
+          <img src={heroZones[activeZone].image} alt="" />
+          <span>{heroZones[activeZone].line}</span>
+        </div>
       </div>
     </section>
   );
