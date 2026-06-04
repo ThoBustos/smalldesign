@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { type PointerEvent as ReactPointerEvent, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Flip } from "gsap/Flip";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,6 +8,26 @@ import { landingContent } from "@/content/landing";
 gsap.registerPlugin(ScrollTrigger, Flip);
 
 const content = landingContent;
+const heroZones = [
+  {
+    key: "belief",
+    label: "Belief",
+    line: content.serviceDetails[0].detail,
+    image: content.serviceDetails[0].image,
+  },
+  {
+    key: "made",
+    label: "Made",
+    line: content.serviceDetails[2].detail,
+    image: content.images.hands,
+  },
+  {
+    key: "visible",
+    label: "Visible.",
+    line: content.serviceDetails[3].detail,
+    image: content.serviceDetails[3].image,
+  },
+];
 
 export function LandingPage() {
   const [loaderDone, setLoaderDone] = useState(false);
@@ -218,30 +238,38 @@ function StudioTopBar() {
 }
 
 function Hero() {
+  const [activeZone, setActiveZone] = useState(0);
+  const followerRef = useRef<HTMLDivElement>(null);
+
+  const moveFollower = (event: ReactPointerEvent<HTMLElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const nextZone = Math.min(heroZones.length - 1, Math.max(0, Math.floor((x / rect.width) * heroZones.length)));
+
+    setActiveZone(nextZone);
+    followerRef.current?.style.setProperty("--cursor-x", `${x}px`);
+    followerRef.current?.style.setProperty("--cursor-y", `${y}px`);
+  };
+
   return (
-    <section className="studio-hero hero-depth js-hero-depth">
+    <section className="studio-hero hero-depth hero-follower" onPointerMove={moveFollower}>
       <GrainOverlay />
       <div className="hero-meta js-hero-reveal">
         <span>{content.studio}</span>
       </div>
-      <div className="hero-showcase js-hero-reveal" aria-hidden="true">
-        <div className="hero-image-frame js-depth-layer" data-depth="14">
-          <img src={content.images.hero} alt="" />
-        </div>
-        <div className="hero-service-rail">
-          {content.services.map((service, index) => (
-            <span key={service}>
-              {String(index + 1).padStart(2, "0")} {service}
-            </span>
-          ))}
-        </div>
-      </div>
       <h1>
-        <span className="js-hero-reveal">Belief</span>
-        <span className="js-hero-reveal">made</span>
-        <span className="js-hero-reveal">visible.</span>
+        {heroZones.map((zone, index) => (
+          <span className={`js-hero-reveal${activeZone === index ? " is-active" : ""}`} key={zone.key}>
+            {zone.label}
+          </span>
+        ))}
       </h1>
       <p className="hero-note js-hero-reveal">{content.headline}</p>
+      <div className="hero-cursor-artifact js-hero-reveal" ref={followerRef} aria-hidden="true">
+        <img src={heroZones[activeZone].image} alt="" />
+        <span>{heroZones[activeZone].line}</span>
+      </div>
     </section>
   );
 }
