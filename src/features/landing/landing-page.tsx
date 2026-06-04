@@ -28,6 +28,14 @@ export function LandingPage() {
         const width = loaderMark.getBoundingClientRect().width || 1;
         return Math.min(Math.max((window.innerWidth * 0.34) / width, 3.2), 5.4);
       };
+      const getIntroX = () => {
+        const loaderMark = document.querySelector<HTMLElement>(".loader-mark");
+        if (!loaderMark) return window.innerWidth / 2;
+
+        const width = loaderMark.getBoundingClientRect().width || 1;
+        const scale = getIntroScale();
+        return window.innerWidth / 2 - (width * scale) / 2;
+      };
       const syncLoaderTypography = () => {
         const logo = document.querySelector<HTMLElement>(".studio-logo");
         const loaderMark = document.querySelector<HTMLElement>(".loader-mark");
@@ -46,9 +54,9 @@ export function LandingPage() {
       loaderTimeline
         .call(syncLoaderTypography)
         .set(".loader-mark", {
-          x: () => window.innerWidth / 2,
+          x: getIntroX,
           y: () => window.innerHeight / 2,
-          xPercent: -50,
+          xPercent: 0,
           yPercent: -50,
           scale: getIntroScale,
         })
