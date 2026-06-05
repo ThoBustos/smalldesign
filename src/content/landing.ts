@@ -73,7 +73,7 @@ export const landingContent = {
     },
   ],
   cta: "Give the brand a shape people remember.",
-  studio: "Head of design as a service",
+  studio: "Head of product design as a service",
   email: "hello@small.design",
   images: {
     hero: "/hero/monet-screen-sunset.png",
