@@ -283,6 +283,10 @@ a {
   z-index: 8;
 }
 
+.hero-card-track {
+  display: block;
+}
+
 .hero-cursor-card {
   background: #050505;
   color: var(--paper-clean);
@@ -290,6 +294,10 @@ a {
   gap: 12px;
   padding: 10px;
   width: 100%;
+}
+
+.hero-cursor-card:not(.is-active) {
+  display: none;
 }
 
 .hero-cursor-card img {
@@ -714,9 +722,9 @@ a {
 }
 
 .studio-footer {
-  background: #08150f;
+  background: #050505;
   color: white;
-  min-height: 66vh;
+  min-height: 58vh;
   overflow: hidden;
   padding: 0;
   position: relative;
@@ -724,8 +732,8 @@ a {
 
 .studio-footer::before {
   background:
-    linear-gradient(180deg, rgba(5, 5, 5, 0.34) 0%, rgba(5, 5, 5, 0.12) 34%, rgba(6, 24, 15, 0.86) 100%),
-    linear-gradient(90deg, rgba(5, 5, 5, 0.32), transparent 32%, rgba(5, 5, 5, 0.22));
+    linear-gradient(180deg, rgba(5, 5, 5, 0.26) 0%, rgba(5, 5, 5, 0.08) 38%, rgba(6, 31, 18, 0.78) 100%),
+    linear-gradient(90deg, rgba(5, 5, 5, 0.32), transparent 38%, rgba(5, 5, 5, 0.24));
   content: "";
   inset: 0;
   position: absolute;
@@ -733,10 +741,10 @@ a {
 }
 
 .studio-footer::after {
-  background: linear-gradient(180deg, transparent 0%, rgba(4, 14, 9, 0.96) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(5, 5, 5, 0.98) 76%);
   bottom: 0;
   content: "";
-  height: 52%;
+  height: 58%;
   left: 0;
   position: absolute;
   width: 100%;
@@ -744,14 +752,14 @@ a {
 }
 
 .studio-footer > img {
-  bottom: 0;
-  filter: saturate(0.96) contrast(1.08);
+  filter: saturate(0.98) contrast(1.06);
   height: 100%;
   left: 0;
   object-fit: cover;
   object-position: center 58%;
-  opacity: 0.82;
+  opacity: 0.92;
   position: absolute;
+  top: 0;
   width: 100%;
   z-index: 0;
 }
@@ -785,19 +793,19 @@ a {
 }
 
 .studio-footer-word {
-  bottom: -0.14em;
-  color: rgba(255, 255, 255, 0.9);
+  bottom: -0.32em;
+  color: rgba(255, 255, 255, 0.82);
   font-family: "Bricolage Grotesque", Inter, sans-serif;
-  font-size: clamp(5rem, 13vw, 14.5rem);
+  font-size: clamp(6rem, 16vw, 17rem);
   font-weight: 800;
-  left: 0;
+  left: 50%;
   letter-spacing: 0;
   line-height: 0.82;
   position: absolute;
   text-align: center;
-  transform: none;
+  transform: translateX(-50%);
   white-space: nowrap;
-  width: 100%;
+  width: max-content;
   z-index: 4;
 }
 
@@ -860,10 +868,40 @@ a {
   .hero-cursor-artifact {
     grid-row: 6;
     left: auto;
+    overflow: visible;
+    pointer-events: auto;
     position: relative;
     top: auto;
     transform: none;
-    width: min(72vw, 320px);
+    width: min(78vw, 340px);
+  }
+
+  .hero-card-track {
+    cursor: grab;
+    display: block;
+    height: clamp(310px, 68vw, 390px);
+    position: relative;
+    touch-action: pan-y;
+    user-select: none;
+    width: min(78vw, 340px);
+    will-change: transform;
+  }
+
+  .hero-card-track:active {
+    cursor: grabbing;
+  }
+
+  .hero-cursor-card,
+  .hero-cursor-card:not(.is-active) {
+    display: grid;
+  }
+
+  .hero-cursor-card {
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: min(78vw, 340px);
+    will-change: transform, opacity;
   }
 
   .hero-depth .hero-note {
@@ -1025,6 +1063,70 @@ a {
 
   .footer-top {
     grid-template-columns: 1fr;
+  }
+
+  .studio-footer {
+    background: #050505;
+    display: grid;
+    grid-template-rows: 118px auto;
+    min-height: auto;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .studio-footer::before {
+    background: linear-gradient(180deg, rgba(5, 5, 5, 0.12), rgba(5, 5, 5, 0.46));
+    content: "";
+    display: block;
+    height: 118px;
+    inset: 0 0 auto;
+    position: absolute;
+    z-index: 1;
+  }
+
+  .studio-footer::after {
+    display: none;
+  }
+
+  .studio-footer > img {
+    filter: saturate(1) contrast(1.02);
+    grid-row: 1;
+    height: 118px;
+    left: auto;
+    object-position: center 42%;
+    opacity: 0.86;
+    position: relative;
+    top: auto;
+    width: 100%;
+  }
+
+  .footer-top {
+    color: rgba(247, 247, 242, 0.92);
+    display: grid;
+    gap: 14px;
+    grid-row: 2;
+    left: 18px;
+    padding: 92px 0 30px;
+    position: relative;
+    right: 18px;
+    top: auto;
+    z-index: 4;
+  }
+
+  .studio-footer-word {
+    bottom: auto;
+    color: rgba(247, 247, 242, 0.9);
+    display: block;
+    font-size: clamp(2.65rem, 12.4vw, 4.2rem);
+    left: 18px;
+    line-height: 0.82;
+    position: absolute;
+    right: 18px;
+    top: 150px;
+    text-align: left;
+    transform: none;
+    white-space: nowrap;
+    width: calc(100% - 36px);
   }
 }
 

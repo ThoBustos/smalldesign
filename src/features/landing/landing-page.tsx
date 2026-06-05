@@ -1,11 +1,12 @@
 import { type PointerEvent as ReactPointerEvent, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { Draggable } from "gsap/Draggable";
 import { Flip } from "gsap/Flip";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GrainOverlay } from "@/components/shared/grain-overlay";
 import { landingContent } from "@/content/landing";
 
-gsap.registerPlugin(ScrollTrigger, Flip);
+gsap.registerPlugin(ScrollTrigger, Flip, Draggable);
 
 const content = landingContent;
 const heroZones = [
@@ -401,6 +402,96 @@ function StudioTopBar() {
 function Hero() {
   const [activeZone, setActiveZone] = useState(0);
   const followerRef = useRef<HTMLDivElement>(null);
+  const cardTrackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const track = cardTrackRef.current;
+    if (!track) return;
+
+    const media = gsap.matchMedia();
+
+    media.add("(max-width: 900px), (pointer: coarse)", () => {
+      const cards = Array.from(track.querySelectorAll<HTMLElement>(".hero-cursor-card"));
+      let activeIndex = 0;
+
+      const getRelativeIndex = (index: number) => {
+        let relative = index - activeIndex;
+        const half = heroZones.length / 2;
+
+        if (relative > half) relative -= heroZones.length;
+        if (relative < -half) relative += heroZones.length;
+
+        return relative;
+      };
+
+      const setFan = (index = activeIndex) => {
+        activeIndex = index;
+
+        cards.forEach((card, cardIndex) => {
+          const relative = getRelativeIndex(cardIndex);
+          const isActive = relative === 0;
+
+          gsap.to(card, {
+            x: isActive ? 0 : relative < 0 ? -26 : 34,
+            y: isActive ? 0 : relative < 0 ? 24 : 16,
+            rotation: isActive ? 0 : relative < 0 ? -8 : 8,
+            scale: isActive ? 1 : relative < 0 ? 0.82 : 0.86,
+            opacity: isActive ? 1 : relative < 0 ? 0.48 : 0.72,
+            zIndex: isActive ? 30 : relative < 0 ? 10 : 20,
+            duration: 0.42,
+            ease: "power3.out",
+            overwrite: true,
+          });
+        });
+      };
+
+      gsap.set(track, { x: 0 });
+      gsap.set(cards, { transformOrigin: "50% 86%" });
+      setFan(0);
+
+      const draggable = Draggable.create(track, {
+        type: "x",
+        bounds: { minX: -110, maxX: 110 },
+        edgeResistance: 0.82,
+        minimumMovement: 8,
+        trigger: track,
+        onPress: function () {
+          this.applyBounds({ minX: -110, maxX: 110 });
+        },
+        onDrag: function () {
+          gsap.to(cards[activeIndex], {
+            rotation: this.x / 13,
+            y: Math.abs(this.x) * -0.05,
+            duration: 0.08,
+            overwrite: true,
+          });
+        },
+        onDragEnd: function () {
+          const threshold = 44;
+          let nextIndex = activeIndex;
+
+          if (this.x < -threshold) nextIndex = (activeIndex + 1) % heroZones.length;
+          if (this.x > threshold) nextIndex = (activeIndex - 1 + heroZones.length) % heroZones.length;
+
+          setActiveZone(nextIndex);
+          gsap.to(track, {
+            x: 0,
+            duration: 0.3,
+            ease: "power3.out",
+          });
+          setFan(nextIndex);
+        },
+      })[0];
+
+      return () => {
+        draggable.kill();
+        gsap.set(track, { clearProps: "transform" });
+        gsap.set(cards, { clearProps: "transform,opacity,zIndex" });
+      };
+    });
+
+    return () => media.revert();
+  }, []);
 
   const moveFollower = (event: ReactPointerEvent<HTMLElement>) => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
@@ -430,9 +521,13 @@ function Hero() {
       </h1>
       <p className="hero-note js-hero-reveal">{content.headline}</p>
       <div className="hero-cursor-artifact" ref={followerRef} aria-hidden="true">
-        <div className="hero-cursor-card js-hero-reveal">
-          <img src={heroZones[activeZone].image} alt="" width="1456" height="816" decoding="async" />
-          <span>{heroZones[activeZone].line}</span>
+        <div className="hero-card-track" ref={cardTrackRef}>
+          {heroZones.map((zone, index) => (
+            <div className={`hero-cursor-card js-hero-reveal${activeZone === index ? " is-active" : ""}`} key={zone.key}>
+              <img src={zone.image} alt="" width="1456" height="816" decoding="async" />
+              <span>{zone.line}</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -561,7 +656,7 @@ function StudioFooter() {
     <footer className="studio-footer">
       <img src={content.images.hero} alt="" aria-hidden="true" width="1456" height="816" loading="lazy" decoding="async" />
       <div className="footer-top">
-        <span>© 2026 small.design</span>
+        <span>© 2026</span>
         <span className="footer-status">All services are online</span>
       </div>
       <div className="studio-footer-word">small.design</div>
