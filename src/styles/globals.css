@@ -376,10 +376,11 @@ a {
 }
 
 .section-kicker .section-label {
+  color: var(--ink);
   margin: 0;
 }
 
-.section-kicker > span:last-child {
+.section-kicker > span:last-child:not(.section-label) {
   color: rgba(5, 5, 5, 0.52);
   font-size: var(--type-label);
   font-weight: 800;
@@ -502,12 +503,17 @@ a {
   width: 100%;
 }
 
-.studio-services article {
+.studio-services .service-row {
   align-items: center;
   background: transparent;
   border-top: 1px solid rgba(5, 5, 5, 0.16);
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  color: inherit;
   cursor: crosshair;
   display: grid;
+  font: inherit;
   gap: clamp(14px, 2.4vw, 34px);
   grid-template-columns: minmax(44px, 0.18fr) minmax(0, 1fr) minmax(110px, 0.34fr);
   min-height: 76px;
@@ -517,14 +523,16 @@ a {
   transition:
     border-color 260ms ease,
     opacity 260ms ease;
+  text-align: left;
+  width: 100%;
 }
 
-.studio-services article:last-child {
+.studio-services .service-row:last-child {
   border-bottom: 1px solid rgba(5, 5, 5, 0.16);
 }
 
-.studio-services article > span,
-.studio-services article > p {
+.studio-services .service-row > span,
+.studio-services .service-row > p {
   color: var(--ink);
   font-size: var(--type-label);
   font-weight: 800;
@@ -533,7 +541,8 @@ a {
   text-transform: uppercase;
 }
 
-.studio-services h2 {
+.studio-services .service-title {
+  display: block;
   font-family: "Bricolage Grotesque", Inter, sans-serif;
   font-size: clamp(1.7rem, 3.2vw, 3.55rem);
   font-weight: 760;
@@ -544,17 +553,28 @@ a {
     opacity 260ms ease;
 }
 
-.studio-services article:not(.is-active) {
-  opacity: 0.48;
+.studio-services .service-row:not(.is-active) {
+  opacity: 1;
 }
 
-.studio-services article.is-active {
+.studio-services .service-row.is-active {
   border-top-color: rgba(5, 5, 5, 0.42);
   opacity: 1;
 }
 
-.studio-services article.is-active h2 {
+.studio-services .service-row.is-active .service-title {
   transform: translateX(8px);
+}
+
+.studio-services .service-row:not(.is-active) > span,
+.studio-services .service-row:not(.is-active) > p,
+.studio-services .service-row:not(.is-active) .service-title {
+  color: rgba(5, 5, 5, 0.68);
+}
+
+.studio-services .service-row:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -4px;
 }
 
 .service-output-tags {
@@ -911,7 +931,7 @@ a {
     left: auto;
   }
 
-  .studio-services article {
+  .studio-services .service-row {
     align-items: start;
     cursor: default;
     grid-template-columns: 38px minmax(0, 1fr);
@@ -931,15 +951,15 @@ a {
     grid-column: 2;
   }
 
-  .studio-services article > p {
+  .studio-services .service-row > p {
     grid-column: 2;
   }
 
-  .studio-services article:not(.is-active) {
+  .studio-services .service-row:not(.is-active) {
     opacity: 1;
   }
 
-  .studio-services article.is-active h2 {
+  .studio-services .service-row.is-active .service-title {
     transform: none;
   }
 
@@ -958,12 +978,12 @@ a {
     width: min(100%, 420px);
   }
 
-  .service-mobile-detail > div {
+  .service-mobile-detail > span {
     display: grid;
     gap: 10px;
   }
 
-  .service-mobile-detail > div > span {
+  .service-mobile-detail > span > span {
     color: rgba(5, 5, 5, 0.56);
     font-size: 0.72rem;
     font-weight: 900;
@@ -1031,11 +1051,11 @@ a {
     flex-direction: column;
   }
 
-  .studio-services h2 {
+  .studio-services .service-title {
     font-size: clamp(2.4rem, 11vw, 4.4rem);
   }
 
-  .studio-services article {
+  .studio-services .service-row {
     grid-template-columns: 30px minmax(0, 1fr);
     padding-left: 18px;
     padding-right: 18px;
