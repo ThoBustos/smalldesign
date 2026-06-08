@@ -544,6 +544,10 @@ a {
   text-transform: uppercase;
 }
 
+.service-row-meta strong {
+  color: #3159f5;
+}
+
 .studio-services .service-title {
   font-family: "Bricolage Grotesque", Inter, sans-serif;
   font-size: clamp(2rem, 3.1vw, 3.6rem);
@@ -554,11 +558,12 @@ a {
 }
 
 .studio-services .service-row p {
-  color: rgba(5, 5, 5, 0.62);
-  font-size: var(--type-body);
-  font-weight: 680;
-  line-height: 1.32;
-  margin: 12px 0 0;
+  color: #3d3a31;
+  font-size: clamp(0.92rem, 1.05vw, 1rem);
+  font-weight: 560;
+  line-height: 1.38;
+  margin: 14px 0 0;
+  max-width: 26ch;
 }
 
 .studio-services .section-kicker .section-label,
