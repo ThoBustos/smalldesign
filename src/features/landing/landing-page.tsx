@@ -19,7 +19,6 @@ export function LandingPage() {
       {!loaderDone && <StudioLoader />}
       <StudioTopBar />
       <Hero />
-      <div className="hero-blackout-transition" aria-hidden="true" />
       <Method />
       <Services />
       <Questions />

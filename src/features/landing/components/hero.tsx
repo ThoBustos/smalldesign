@@ -47,6 +47,7 @@ export function Hero() {
           ))}
         </div>
       </div>
+      <div className="hero-transition-curtain" aria-hidden="true" />
     </section>
   );
 }

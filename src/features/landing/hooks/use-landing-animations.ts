@@ -135,21 +135,36 @@ export function useLandingAnimations(onLoaderDone: () => void) {
           },
         );
 
-        gsap.fromTo(
-          ".method-blackout",
-          { scaleY: 0 },
-          {
-            scaleY: 1,
-            duration: 1,
-            ease: "none",
+        gsap.set(".hero-transition-curtain", { scaleY: 0, transformOrigin: "bottom" });
+        gsap.set(".method-blackout", { scaleY: 1 });
+        gsap.set(".method-editor", { opacity: 0, y: 28 });
+
+        gsap
+          .timeline({
             scrollTrigger: {
-              trigger: ".studio-method",
-              start: "top 100%",
-              end: "top 42%",
+              trigger: ".studio-hero",
+              start: "bottom 92%",
+              end: "bottom 8%",
               scrub: true,
             },
+          })
+          .to(".hero-depth h1, .hero-depth .hero-meta, .hero-depth .hero-note", { opacity: 0, y: -36, ease: "none" }, 0)
+          .to(".hero-cursor-card:not(.is-active)", { opacity: 0, y: -22, ease: "none" }, 0.08)
+          .to(".hero-cursor-card.is-active", { opacity: 0, y: -34, scale: 0.96, ease: "none" }, 0.34)
+          .to(".hero-transition-curtain", { scaleY: 1, ease: "none" }, 0.2);
+
+        gsap.to(".method-editor", {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".studio-method",
+            start: "top 20%",
+            end: "top -8%",
+            scrub: true,
           },
-        );
+        });
 
         gsap.to(".method-kicker, .method-edit, .method-final", {
           color: "#f7f7f2",
@@ -210,6 +225,7 @@ export function useLandingAnimations(onLoaderDone: () => void) {
       });
 
       motionMedia.add("(max-width: 900px)", () => {
+        gsap.set(".method-editor", { opacity: 1, y: 0 });
         gsap.set(".method-kicker, .method-edit, .method-final", { color: "#f7f7f2" });
         gsap.set(".method-cut", { color: "rgba(247, 247, 242, 0.3)" });
         gsap.fromTo(
