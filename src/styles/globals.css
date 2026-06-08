@@ -640,16 +640,16 @@ a {
 }
 
 .question-list summary > span:first-child {
-  color: rgba(244, 244, 240, 0.68);
+  color: rgba(244, 244, 240, 0.92);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.78rem;
   font-weight: 900;
 }
 
 .question-list details > p {
-  color: rgba(244, 244, 240, 0.64);
+  color: rgba(244, 244, 240, 0.9);
   font-size: var(--type-body-lg);
-  font-weight: 680;
+  font-weight: 560;
   line-height: 1.35;
   margin: 18px 0 0 calc(44px + clamp(18px, 3vw, 42px));
   max-width: 620px;
