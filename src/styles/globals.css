@@ -162,6 +162,14 @@ a {
   position: relative;
 }
 
+.hero-blackout-transition {
+  background: #050505;
+  height: 100svh;
+  margin-top: -1px;
+  position: relative;
+  z-index: 1;
+}
+
 .hero-meta,
 .hero-note {
   font-size: var(--type-label);
@@ -407,24 +415,24 @@ a {
 
 .studio-method {
   align-items: start;
-  background: var(--paper-clean);
+  background: #050505;
   display: grid;
   min-height: 120vh;
-  overflow: visible;
+  overflow: clip;
   padding: clamp(62px, 7vw, 104px) clamp(22px, 5vw, 96px);
   position: relative;
 }
 
 .method-blackout {
   background: #050505;
-  height: calc(100% + 100vh);
+  height: calc(100% + 120vh);
   left: 0;
   pointer-events: none;
   position: absolute;
   right: 0;
-  top: -100vh;
+  top: -120vh;
   transform: scaleY(0);
-  transform-origin: center 100vh;
+  transform-origin: center top;
   z-index: 0;
 }
 

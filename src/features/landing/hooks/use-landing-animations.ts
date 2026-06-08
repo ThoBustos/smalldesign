@@ -144,8 +144,8 @@ export function useLandingAnimations(onLoaderDone: () => void) {
             ease: "none",
             scrollTrigger: {
               trigger: ".studio-method",
-              start: "top 92%",
-              end: "top 18%",
+              start: "top 100%",
+              end: "top 42%",
               scrub: true,
             },
           },
@@ -157,8 +157,8 @@ export function useLandingAnimations(onLoaderDone: () => void) {
           ease: "none",
           scrollTrigger: {
             trigger: ".studio-method",
-            start: "top 58%",
-            end: "top 20%",
+            start: "top 48%",
+            end: "top 18%",
             scrub: true,
           },
         });
@@ -172,8 +172,8 @@ export function useLandingAnimations(onLoaderDone: () => void) {
             ease: "none",
             scrollTrigger: {
               trigger: ".studio-method",
-              start: "top 72%",
-              end: "top 28%",
+              start: "top 44%",
+              end: "top 18%",
               scrub: true,
             },
           },
