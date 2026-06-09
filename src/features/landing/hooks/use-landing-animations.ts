@@ -192,8 +192,8 @@ export function useLandingAnimations(onLoaderDone: () => void) {
           .to(
             ".hero-cursor-artifact",
             {
-              "--cursor-x": "50vw",
-              "--cursor-y": "86vh",
+              x: () => window.innerWidth * 0.5,
+              y: () => window.innerHeight * 0.86,
               width: "clamp(360px, 32vw, 540px)",
               ease: "none",
             },

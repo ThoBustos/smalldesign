@@ -1,14 +1,41 @@
-import { type PointerEvent as ReactPointerEvent, useRef, useState } from "react";
+import { type PointerEvent as ReactPointerEvent, useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 import { GrainOverlay } from "@/components/shared/grain-overlay";
 import { useHeroCards } from "../hooks/use-hero-cards";
 import { content, heroZones } from "../landing-content";
+
+type QuickSetter = (value: number) => void;
 
 export function Hero() {
   const [activeZone, setActiveZone] = useState(0);
   const followerRef = useRef<HTMLDivElement>(null);
   const cardTrackRef = useRef<HTMLDivElement>(null);
+  const quickSettersRef = useRef<{ x: QuickSetter; y: QuickSetter } | null>(null);
+  const lastTargetRef = useRef({ x: 0, y: 0 });
 
   useHeroCards({ cardTrackRef, setActiveZone });
+
+  useEffect(() => {
+    const follower = followerRef.current;
+    if (!follower) return;
+
+    gsap.set(follower, {
+      x: window.innerWidth * 0.68,
+      xPercent: -50,
+      y: window.innerHeight * 0.48,
+      yPercent: -50,
+    });
+
+    quickSettersRef.current = {
+      x: gsap.quickTo(follower, "x", { duration: 0.48, ease: "power3.out" }),
+      y: gsap.quickTo(follower, "y", { duration: 0.48, ease: "power3.out" }),
+    };
+
+    return () => {
+      gsap.killTweensOf(follower);
+      quickSettersRef.current = null;
+    };
+  }, []);
 
   const moveFollower = (event: ReactPointerEvent<HTMLElement>) => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
@@ -25,10 +52,33 @@ export function Hero() {
     const offsetY = halfCardHeight + 18;
     const cardX = clamp(x + (x > rect.width / 2 ? -offsetX : offsetX), halfCardWidth + 18, rect.width - halfCardWidth - 18);
     const cardY = clamp(y + (y > rect.height / 2 ? -offsetY : offsetY), halfCardHeight + 18, rect.height - halfCardHeight - 18);
+    const deltaX = cardX - lastTargetRef.current.x;
+    const deltaY = cardY - lastTargetRef.current.y;
+    const rotation = clamp(deltaX * 0.025, -5, 5);
+    const lift = clamp(Math.abs(deltaY) * 0.01, 0, 4);
 
     setActiveZone(nextZone);
-    followerRef.current?.style.setProperty("--cursor-x", `${cardX}px`);
-    followerRef.current?.style.setProperty("--cursor-y", `${cardY}px`);
+    quickSettersRef.current?.x(cardX);
+    quickSettersRef.current?.y(cardY);
+    lastTargetRef.current = { x: cardX, y: cardY };
+
+    if (cardTrackRef.current) {
+      gsap.to(cardTrackRef.current, {
+        rotate: rotation,
+        y: -lift,
+        duration: 0.34,
+        ease: "power3.out",
+        overwrite: true,
+      });
+      gsap.to(cardTrackRef.current, {
+        rotate: 0,
+        y: 0,
+        duration: 0.7,
+        delay: 0.08,
+        ease: "elastic.out(1, 0.72)",
+        overwrite: "auto",
+      });
+    }
   };
 
   return (

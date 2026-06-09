@@ -282,13 +282,10 @@ a {
 }
 
 .hero-cursor-artifact {
-  --cursor-x: 68vw;
-  --cursor-y: 48vh;
   left: 0;
   pointer-events: none;
   position: absolute;
   top: 0;
-  transform: translate(calc(var(--cursor-x) - 50%), calc(var(--cursor-y) - 50%));
   width: clamp(190px, 22vw, 360px);
   will-change: transform, width;
   z-index: 8;
