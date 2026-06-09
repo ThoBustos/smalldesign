@@ -48,10 +48,8 @@ export function Hero() {
     const cardRect = followerRef.current?.getBoundingClientRect();
     const halfCardWidth = (cardRect?.width ?? 320) / 2;
     const halfCardHeight = (cardRect?.height ?? 280) / 2;
-    const offsetX = halfCardWidth + 24;
-    const offsetY = halfCardHeight + 18;
-    const cardX = clamp(x + (x > rect.width / 2 ? -offsetX : offsetX), halfCardWidth + 18, rect.width - halfCardWidth - 18);
-    const cardY = clamp(y + (y > rect.height / 2 ? -offsetY : offsetY), halfCardHeight + 18, rect.height - halfCardHeight - 18);
+    const cardX = clamp(x + halfCardWidth + 24, halfCardWidth + 18, rect.width - halfCardWidth - 18);
+    const cardY = clamp(y + halfCardHeight + 18, halfCardHeight + 18, rect.height - halfCardHeight - 18);
     const deltaX = cardX - lastTargetRef.current.x;
     const deltaY = cardY - lastTargetRef.current.y;
     const rotation = clamp(deltaX * 0.025, -5, 5);
