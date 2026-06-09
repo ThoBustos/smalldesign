@@ -124,32 +124,37 @@ export function useLandingAnimations(onLoaderDone: () => void) {
 
         gsap.set(serviceCards, {
           clipPath: "inset(0 100% 0 0)",
-          y: 34,
+          y: 72,
         });
         gsap.set(".service-image-mask", {
           clipPath: "inset(0 0 100% 0)",
         });
+        gsap.set(".service-image-mask img", { scale: 1.08 });
         gsap.set(".js-service-detail", {
           opacity: 0,
-          y: 16,
+          y: 28,
         });
 
         const servicesTimeline = gsap.timeline({
           scrollTrigger: {
             trigger: ".services-system",
-            start: "top 74%",
+            start: "top 64%",
+            end: "center 34%",
+            scrub: 0.7,
           },
         });
 
         serviceCards.forEach((card, index) => {
           const imageMask = card.querySelector(".service-image-mask");
+          const image = card.querySelector(".service-image-mask img");
           const details = card.querySelectorAll(".js-service-detail");
-          const at = index * 0.13;
+          const at = index * 0.18;
 
           servicesTimeline
-            .to(card, { clipPath: "inset(0 0% 0 0)", y: 0, duration: 0.72, ease: "power4.out" }, at)
-            .to(imageMask, { clipPath: "inset(0 0 0% 0)", duration: 0.62, ease: "power3.inOut" }, at + 0.14)
-            .to(details, { opacity: 1, y: 0, duration: 0.48, stagger: 0.06, ease: "power3.out" }, at + 0.3);
+            .to(card, { clipPath: "inset(0 0% 0 0)", y: 0, duration: 0.9, ease: "none" }, at)
+            .to(imageMask, { clipPath: "inset(0 0 0% 0)", duration: 0.72, ease: "none" }, at + 0.3)
+            .to(image, { scale: 1, duration: 0.72, ease: "none" }, at + 0.3)
+            .to(details, { opacity: 1, y: 0, duration: 0.66, stagger: 0.08, ease: "none" }, at + 0.74);
         });
 
         gsap.fromTo(
