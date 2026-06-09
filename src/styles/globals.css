@@ -290,6 +290,7 @@ a {
   top: 0;
   transform: translate(calc(var(--cursor-x) - 50%), calc(var(--cursor-y) - 50%));
   width: clamp(190px, 22vw, 360px);
+  will-change: transform, width;
   z-index: 8;
 }
 
@@ -304,6 +305,7 @@ a {
   gap: 12px;
   padding: 10px;
   width: 100%;
+  will-change: transform, opacity;
 }
 
 .hero-cursor-card:not(.is-active) {
@@ -419,7 +421,7 @@ a {
   align-items: start;
   background: #050505;
   display: grid;
-  min-height: 120vh;
+  min-height: 110vh;
   overflow: clip;
   padding: clamp(62px, 7vw, 104px) clamp(22px, 5vw, 96px);
   position: relative;
@@ -439,11 +441,12 @@ a {
 }
 
 .method-editor {
-  align-content: center;
+  align-content: start;
   display: grid;
-  min-height: 100vh;
+  min-height: 86vh;
   margin-left: auto;
   margin-right: auto;
+  padding-top: clamp(96px, 14vh, 170px);
   position: sticky;
   top: 0;
   width: min(100%, 1180px);
@@ -783,6 +786,7 @@ a {
 
   .method-editor {
     min-height: auto;
+    padding-top: 0;
     position: relative;
     top: auto;
   }

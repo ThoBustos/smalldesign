@@ -137,21 +137,44 @@ export function useLandingAnimations(onLoaderDone: () => void) {
 
         gsap.set(".hero-transition-curtain", { scaleY: 0, transformOrigin: "bottom" });
         gsap.set(".method-blackout", { scaleY: 1 });
-        gsap.set(".method-editor", { opacity: 0, y: 28 });
+        gsap.set(".method-editor", { opacity: 0, y: 16 });
 
         gsap
           .timeline({
             scrollTrigger: {
               trigger: ".studio-hero",
-              start: "bottom 92%",
-              end: "bottom 8%",
+              start: "bottom 96%",
+              end: "bottom -10%",
               scrub: true,
             },
           })
-          .to(".hero-depth h1, .hero-depth .hero-meta, .hero-depth .hero-note", { opacity: 0, y: -36, ease: "none" }, 0)
-          .to(".hero-cursor-card:not(.is-active)", { opacity: 0, y: -22, ease: "none" }, 0.08)
-          .to(".hero-cursor-card.is-active", { opacity: 0, y: -34, scale: 0.96, ease: "none" }, 0.34)
-          .to(".hero-transition-curtain", { scaleY: 1, ease: "none" }, 0.2);
+          .set(".hero-depth h1 span", { color: "#050505", textShadow: "none" }, 0)
+          .to(".hero-depth h1", { y: 118, scale: 1.08, transformOrigin: "left bottom", ease: "none" }, 0)
+          .to(".hero-depth .hero-note", { y: 150, ease: "none" }, 0)
+          .to(".hero-cursor-card:not(.is-active)", { opacity: 0, scale: 0.92, ease: "none" }, 0)
+          .to(
+            ".hero-cursor-artifact",
+            {
+              "--cursor-x": "50vw",
+              "--cursor-y": "86vh",
+              width: "clamp(360px, 32vw, 540px)",
+              ease: "none",
+            },
+            0.08,
+          )
+          .to(".hero-cursor-card.is-active", { scale: 1.08, transformOrigin: "50% 50%", ease: "none" }, 0.08);
+
+        gsap.to(".hero-cursor-card.is-active", {
+          opacity: 0,
+          y: -34,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".studio-method",
+            start: "top 20%",
+            end: "top 8%",
+            scrub: true,
+          },
+        });
 
         gsap.to(".method-editor", {
           opacity: 1,
@@ -160,8 +183,8 @@ export function useLandingAnimations(onLoaderDone: () => void) {
           ease: "none",
           scrollTrigger: {
             trigger: ".studio-method",
-            start: "top 20%",
-            end: "top -8%",
+            start: "top 72%",
+            end: "top 36%",
             scrub: true,
           },
         });
@@ -172,8 +195,8 @@ export function useLandingAnimations(onLoaderDone: () => void) {
           ease: "none",
           scrollTrigger: {
             trigger: ".studio-method",
-            start: "top 48%",
-            end: "top 18%",
+            start: "top 76%",
+            end: "top 42%",
             scrub: true,
           },
         });
@@ -187,8 +210,8 @@ export function useLandingAnimations(onLoaderDone: () => void) {
             ease: "none",
             scrollTrigger: {
               trigger: ".studio-method",
-              start: "top 44%",
-              end: "top 18%",
+              start: "top 76%",
+              end: "top 42%",
               scrub: true,
             },
           },
@@ -200,8 +223,8 @@ export function useLandingAnimations(onLoaderDone: () => void) {
           ease: "none",
           scrollTrigger: {
             trigger: ".studio-method",
-            start: "top 44%",
-            end: "center 44%",
+            start: "top 54%",
+            end: "center 48%",
             scrub: true,
           },
         });
