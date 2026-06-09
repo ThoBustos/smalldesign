@@ -558,7 +558,7 @@ a {
 }
 
 .service-row-meta strong {
-  color: #3159f5;
+  color: var(--ink);
 }
 
 .studio-services .service-title {
