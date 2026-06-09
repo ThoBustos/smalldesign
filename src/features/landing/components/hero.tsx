@@ -18,12 +18,13 @@ export function Hero() {
     const y = event.clientY - rect.top;
     const nextZone = Math.min(heroZones.length - 1, Math.max(0, Math.floor((x / rect.width) * heroZones.length)));
     const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
-    const cardSafeX = clamp(rect.width * 0.22, 260, 360);
-    const cardSafeY = clamp(rect.height * 0.18, 150, 230);
-    const zoneOffset = nextZone === 0 ? rect.width * 0.24 : nextZone === heroZones.length - 1 ? rect.width * -0.18 : 0;
-    const zoneMinX = nextZone === 0 ? rect.width * 0.58 : cardSafeX;
-    const cardX = clamp(x + zoneOffset, zoneMinX, rect.width - cardSafeX);
-    const cardY = clamp(y, cardSafeY, rect.height - cardSafeY);
+    const cardRect = followerRef.current?.getBoundingClientRect();
+    const halfCardWidth = (cardRect?.width ?? 320) / 2;
+    const halfCardHeight = (cardRect?.height ?? 280) / 2;
+    const offsetX = halfCardWidth + 24;
+    const offsetY = halfCardHeight + 18;
+    const cardX = clamp(x + (x > rect.width / 2 ? -offsetX : offsetX), halfCardWidth + 18, rect.width - halfCardWidth - 18);
+    const cardY = clamp(y + (y > rect.height / 2 ? -offsetY : offsetY), halfCardHeight + 18, rect.height - halfCardHeight - 18);
 
     setActiveZone(nextZone);
     followerRef.current?.style.setProperty("--cursor-x", `${cardX}px`);
