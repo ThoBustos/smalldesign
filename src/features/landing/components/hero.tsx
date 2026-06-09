@@ -17,10 +17,17 @@ export function Hero() {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     const nextZone = Math.min(heroZones.length - 1, Math.max(0, Math.floor((x / rect.width) * heroZones.length)));
+    const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+    const cardSafeX = clamp(rect.width * 0.22, 260, 360);
+    const cardSafeY = clamp(rect.height * 0.18, 150, 230);
+    const zoneOffset = nextZone === 0 ? rect.width * 0.24 : nextZone === heroZones.length - 1 ? rect.width * -0.18 : 0;
+    const zoneMinX = nextZone === 0 ? rect.width * 0.58 : cardSafeX;
+    const cardX = clamp(x + zoneOffset, zoneMinX, rect.width - cardSafeX);
+    const cardY = clamp(y, cardSafeY, rect.height - cardSafeY);
 
     setActiveZone(nextZone);
-    followerRef.current?.style.setProperty("--cursor-x", `${x}px`);
-    followerRef.current?.style.setProperty("--cursor-y", `${y}px`);
+    followerRef.current?.style.setProperty("--cursor-x", `${cardX}px`);
+    followerRef.current?.style.setProperty("--cursor-y", `${cardY}px`);
   };
 
   return (
