@@ -527,10 +527,16 @@ a {
   padding: clamp(12px, 1.4vw, 18px);
   position: relative;
   transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: clip-path, transform;
 }
 
 .studio-services .service-row:hover {
   transform: translateY(-8px);
+}
+
+.service-image-mask {
+  overflow: hidden;
+  will-change: clip-path;
 }
 
 .studio-services .service-row img {
@@ -539,6 +545,10 @@ a {
   filter: saturate(0.92);
   object-fit: cover;
   width: 100%;
+}
+
+.js-service-detail {
+  will-change: opacity, transform;
 }
 
 .service-row-meta {
@@ -1005,15 +1015,14 @@ a {
     color: rgba(247, 247, 242, 0.9);
     display: block;
     font-size: clamp(2.65rem, 12.4vw, 4.2rem);
-    left: 18px;
+    left: 50%;
     line-height: 0.82;
     position: absolute;
-    right: 18px;
     top: 150px;
-    text-align: left;
-    transform: none;
+    text-align: center;
+    transform: translateX(-50%);
     white-space: nowrap;
-    width: calc(100% - 36px);
+    width: max-content;
   }
 }
 

@@ -120,6 +120,38 @@ export function useLandingAnimations(onLoaderDone: () => void) {
       });
 
       motionMedia.add("(min-width: 901px)", () => {
+        const serviceCards = gsap.utils.toArray<HTMLElement>(".js-service-card");
+
+        gsap.set(serviceCards, {
+          clipPath: "inset(0 100% 0 0)",
+          y: 34,
+        });
+        gsap.set(".service-image-mask", {
+          clipPath: "inset(0 0 100% 0)",
+        });
+        gsap.set(".js-service-detail", {
+          opacity: 0,
+          y: 16,
+        });
+
+        const servicesTimeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".services-system",
+            start: "top 74%",
+          },
+        });
+
+        serviceCards.forEach((card, index) => {
+          const imageMask = card.querySelector(".service-image-mask");
+          const details = card.querySelectorAll(".js-service-detail");
+          const at = index * 0.13;
+
+          servicesTimeline
+            .to(card, { clipPath: "inset(0 0% 0 0)", y: 0, duration: 0.72, ease: "power4.out" }, at)
+            .to(imageMask, { clipPath: "inset(0 0 0% 0)", duration: 0.62, ease: "power3.inOut" }, at + 0.14)
+            .to(details, { opacity: 1, y: 0, duration: 0.48, stagger: 0.06, ease: "power3.out" }, at + 0.3);
+        });
+
         gsap.fromTo(
           ".studio-footer-word",
           { y: 80, opacity: 0 },
@@ -248,6 +280,8 @@ export function useLandingAnimations(onLoaderDone: () => void) {
       });
 
       motionMedia.add("(max-width: 900px)", () => {
+        gsap.set(".js-service-card, .service-image-mask", { clearProps: "clipPath,transform" });
+        gsap.set(".js-service-detail", { opacity: 1, y: 0 });
         gsap.set(".method-editor", { opacity: 1, y: 0 });
         gsap.set(".method-kicker, .method-edit, .method-final", { color: "#f7f7f2" });
         gsap.set(".method-cut", { color: "rgba(247, 247, 242, 0.3)" });
