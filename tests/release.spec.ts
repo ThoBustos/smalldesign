@@ -39,13 +39,9 @@ test("diagnostic validates, reviews and preserves edits", async ({ page }) => {
   await expect(page.getByLabel("Your name", { exact: true })).toBeFocused();
   await page.getByLabel("Your name", { exact: true }).fill("Test migration");
   await page.getByLabel("Work email", { exact: true }).fill("test@example.com");
-  await page
-    .getByRole("radio", { name: "Starting from scratch", exact: true })
-    .check();
-  await page.getByRole("checkbox", { name: "Brand", exact: true }).check();
-  await page
-    .getByRole("radio", { name: "A clearer story", exact: true })
-    .check();
+  await page.getByText("Starting from scratch", { exact: true }).click();
+  await page.getByText("Brand", { exact: true }).click();
+  await page.getByText("A clearer story", { exact: true }).click();
   await page.getByRole("radio", { name: "Founder / CEO", exact: true }).check();
   await page.getByRole("button", { name: "Review my request" }).click();
   await expect(
