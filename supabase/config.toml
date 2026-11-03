@@ -3,3 +3,5 @@ project_id = "small-design"
 verify_jwt = false
 [functions.process-leads]
 verify_jwt = false
+[functions.resend-events]
+verify_jwt = false

@@ -1,5 +1,6 @@
 import { databaseClient, requireEnv, serverKey } from '../_shared/services.mjs';
 import { attioClient, integrationError, processLead } from '../_shared/worker.mjs';
+import { processAcknowledgement, resendSender } from '../_shared/acknowledgement.mjs';
 const rpc = databaseClient(requireEnv('SUPABASE_URL'), serverKey());
 const digest = async (v: string) => new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)));
 async function authorized(request: Request) {
@@ -23,12 +24,27 @@ Deno.serve(async (request: Request) => {
     },
   };
   try {
+    let acknowledgements = 0;
+    if (Deno.env.get('RESEND_ACK_ENABLED') === 'true') {
+      try {
+      const send = resendSender(requireEnv('RESEND_API_KEY'));
+      const emails = await rpc('claim_acknowledgements', {});
+      for (const email of emails) {
+        await processAcknowledgement(email, {
+          now: Date.now, send,
+          finish: (id: string, lease: string, provider: string) => rpc('finish_acknowledgement', {p_id:id,p_lease:lease,p_provider:provider}),
+          retry: (id: string, lease: string, error: string, review: boolean) => rpc('retry_acknowledgement', {p_id:id,p_lease:lease,p_error:error,p_review:review}),
+        });
+        acknowledgements++;
+      }
+      } catch { console.error('acknowledgement_queue_needs_attention'); }
+    }
     const jobs=await rpc('claim_leads',{p_limit:1});
     const results=[];
     // Bound each invocation; queue leases allow a later invocation to recover a crash.
     for(const job of jobs) results.push(await processLead(job,deps));
     const health=await rpc('lead_health',{});
     if(health.failed || health.stale) console.error('lead_queue_needs_attention',health);
-    return Response.json({processed:results.length,retried:results.filter(v=>v==='retry').length,health});
+    return Response.json({processed:results.length,retried:results.filter(v=>v==='retry').length,acknowledgements,health});
   } catch { console.error('lead_worker_failed'); return new Response('Processing unavailable',{status:503}); }
 });
