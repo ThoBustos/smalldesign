@@ -24,12 +24,15 @@ Email failure tracking is stored in the private database. A proactive operationa
 
 ## Rollout state
 
-Prepared on codex/small-design-email, draft PR #10. CI checks pass.
+Implemented on codex/small-design-email, PR #10. CI checks pass.
 
 - Free Resend account created via Google as thomas@ainativeclub.com with explicit signup consent.
 - Only small.design was added. Sending DNS approved and added in Letstalk AI Cloudflare: resend._domainkey TXT, rsend CNAME to rsend-sae1.forge.rmta.net, and send CNAME to send.forge.rmta.net. CNAMEs are DNS-only. Root Workspace MX and website records were not changed. Resend domain status is Verified, domain ID 3b0f3b7c-6551-4238-8c21-2a647b648d35.
 - Gmail OAuth was explicitly approved for the whole centralized mailbox. Grok confirms connection as thomas@ainativeclub.com, with human@small.design and thomas@small.design verified sending aliases. Small Design-only instructions and exact-message approval before sends were saved and acknowledged. No recurring inbox scans enabled.
 - Migration 202611020003_acknowledgements.sql applied once through the dashboard successfully. Existing migrations were not reapplied; no backfill performed.
-- Updated process-leads and new resend-events functions deployed. Email sending remains disabled because RESEND_ACK_ENABLED was not enabled. resend-events still has the legacy JWT gate enabled pending consent to signature-based public webhook authentication.
-- Pending: sending-only key restricted to small.design, encrypted Supabase secrets, Resend webhook registration/signing secret, approved signature-based endpoint access, controlled delivery/reply test, and final PR merge. API key has not been created yet.
-- Work paused because macOS reported the Mac is locked and requires manual unlock. No receipt email has been sent and no other domain configured.
+- Updated process-leads and new resend-events functions deployed. RESEND_ACK_ENABLED=true is saved in encrypted function secrets.
+- A sending-only Resend key restricted to small.design and the webhook signing secret are stored only in this project's encrypted function secrets. Stored SHA256 digests were checked against the generated values without logging credentials.
+- Webhook 47baf7d3-06d6-4031-9c25-43437d09cc1b subscribes to the seven delivery event types above. Its legacy JWT gate is off with explicit approval; raw-body Svix signature verification is mandatory. An unsigned POST returned 401 Invalid signature.
+- Controlled acknowledgement fixture a3b0976f-dfe5-4d59-b571-c386e7edfc04 was queued through the private database to Thomas's own inbox. The scheduled worker sent once, on attempt 1. Provider receipt 01a19fb3-2dd6-7a2e-8a8b-cda800fed6c8 recorded email.delivered at 2026-11-03 04:38:05.763 UTC through the signed webhook.
+- Gmail search returned exactly one receipt, in Inbox. Headers confirmed From Small Design <human@small.design>, Reply-To human@small.design, mailed-by rsend.small.design, signed-by small.design, and TLS. This test exercised the acknowledgement queue, scheduler, provider and signed event reconciliation. It did not create a CRM job or bypass the public form's Turnstile; the existing form/CRM/phone path was tested separately before this rollout.
+- No other sending domain was configured. No personal reply or prospect outreach was sent. Automated fixed receipts are enabled for new Small Design submissions; personal Grok sends still require exact-message approval.
