@@ -1,9 +1,10 @@
-export function startHero(canvas: HTMLCanvasElement, onReady?: () => void) {
+export function startHero(canvas: HTMLCanvasElement, onUnfolded?: () => void, onError?: () => void) {
   const ctx = canvas.getContext("2d")!;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)"),
     images: Record<string, HTMLImageElement> = {};
   let spec: Record<string, [number, number, number, number][]>,
     disposed = false,
+    announced = false,
     ready = false,
     t = 0,
     last = 0,
@@ -181,6 +182,7 @@ export function startHero(canvas: HTMLCanvasElement, onReady?: () => void) {
       x = cx - s * speed;
       index = waddle(x, base, size, s);
     } else phase = "empty";
+    if (phase === "idle" && !announced) { announced = true; onUnfolded?.(); }
     canvas.dataset.phase = phase;
     canvas.dataset.x = x.toFixed(1);
     canvas.dataset.frame = String(index);
@@ -227,7 +229,7 @@ export function startHero(canvas: HTMLCanvasElement, onReady?: () => void) {
   };
   reduced.addEventListener("change", resume);
   document.addEventListener("visibilitychange", resume);
-  fetch("/assets/journey.json")
+  fetch("/assets/journey.json", { signal: AbortSignal.timeout(8000) })
     .then((r) => {
       if (!r.ok) throw Error("metadata");
       return r.json();
@@ -250,10 +252,11 @@ export function startHero(canvas: HTMLCanvasElement, onReady?: () => void) {
       );
       if (disposed) return;
       ready = true;
-      onReady?.();
       schedule();
     })
     .catch(() => {
+      if (disposed) return;
+      onError?.();
       canvas.setAttribute("aria-label", "Small’s painted companion");
     });
 

@@ -19,16 +19,14 @@ export function Landing() {
       const targets = hero.current!.querySelectorAll("h1 span, .bottom-copy p, .diagnostic");
       gsap.set(targets, { opacity: 0, y: 10 });
       const entrance = gsap.timeline({ paused: true })
-        .to(targets[0], { opacity: 1, y: 0, duration: 0.75, ease: "power2.out" }, 0.55)
-        .to(targets[1], { opacity: 1, y: 0, duration: 0.75, ease: "power2.out" }, 0.68)
-        .to(targets[2], { opacity: 1, y: 0, duration: 0.65, ease: "power2.out" }, 1.05)
-        .to(targets[3], { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", clearProps: "opacity,transform" }, 1.3);
+        .to(targets[0], { opacity: 1, y: 0, duration: 1.1, ease: "power2.out" }, 0)
+        .to(targets[1], { opacity: 1, y: 0, duration: 1.1, ease: "power2.out" }, 0.16)
+        .to(targets[2], { opacity: 1, y: 0, duration: 1.1, ease: "power2.out" }, 1.35)
+        .to(targets[3], { opacity: 1, y: 0, duration: 1, ease: "power2.out", clearProps: "opacity,transform" }, 2.55);
       let started = false;
       const reveal = () => { if (!started) { started = true; entrance.play(); } };
-      stopHero = startHero(canvas.current!, reveal);
-      // Content remains available if the artwork is slow or unavailable.
-      const fallback = window.setTimeout(reveal, 2500);
-      return () => { clearTimeout(fallback); stopHero?.(); };
+      stopHero = startHero(canvas.current!, reveal, reveal);
+      return () => { stopHero?.(); };
     }, hero);
     media.add("(prefers-reduced-motion: reduce)", () => startHero(canvas.current!));
     return () => { media.revert(); stopHero?.(); };
@@ -70,6 +68,27 @@ export function Landing() {
   );
 }
 function ContactFooter() {
+  const footer = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const el = footer.current!;
+      const targets = el.querySelectorAll(".contact-copy h2, .contact-copy p, .contact-copy a");
+      gsap.set(targets, { opacity: 0, y: 12 });
+      const reveal = gsap.timeline({ paused: true })
+        .to(targets[0], { opacity: 1, y: 0, duration: 1.15, ease: "power2.out" }, 0.15)
+        .to(targets[1], { opacity: 1, y: 0, duration: 1.05, ease: "power2.out" }, 1.15)
+        .to(targets[2], { opacity: 1, y: 0, duration: 1, ease: "power2.out", clearProps: "opacity,transform" }, 2.15);
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) { reveal.play(); observer.disconnect(); }
+      }, { threshold: 0.2 });
+      observer.observe(el);
+      const focus = () => { reveal.progress(1); };
+      el.addEventListener("focusin", focus);
+      return () => { observer.disconnect(); el.removeEventListener("focusin", focus); };
+    }, footer);
+    return () => media.revert();
+  }, []);
   const film = useRef<HTMLVideoElement>(null);
   const poster = useRef<HTMLImageElement>(null);
   const wrapper = useRef<HTMLDivElement>(null);
@@ -126,6 +145,7 @@ function ContactFooter() {
   }, []);
   return (
     <footer
+      ref={footer}
       className="contact-footer"
       id="next"
       aria-labelledby="contact-title"
