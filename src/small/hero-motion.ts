@@ -1,4 +1,4 @@
-export function startHero(canvas: HTMLCanvasElement) {
+export function startHero(canvas: HTMLCanvasElement, onReady?: () => void) {
   const ctx = canvas.getContext("2d")!;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)"),
     images: Record<string, HTMLImageElement> = {};
@@ -248,7 +248,9 @@ export function startHero(canvas: HTMLCanvasElement) {
             }),
         ),
       );
+      if (disposed) return;
       ready = true;
+      onReady?.();
       schedule();
     })
     .catch(() => {

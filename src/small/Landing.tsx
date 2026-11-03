@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
 import { startHero } from "./hero-motion";
 export function Wordmark() {
   return (
@@ -10,7 +11,28 @@ export function Wordmark() {
 }
 export function Landing() {
   const canvas = useRef<HTMLCanvasElement>(null);
-  useEffect(() => (canvas.current ? startHero(canvas.current) : undefined), []);
+  const hero = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    const media = gsap.matchMedia();
+    let stopHero: (() => void) | undefined;
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const targets = hero.current!.querySelectorAll("h1 span, .bottom-copy p, .diagnostic");
+      gsap.set(targets, { opacity: 0, y: 10 });
+      const entrance = gsap.timeline({ paused: true })
+        .to(targets[0], { opacity: 1, y: 0, duration: 0.75, ease: "power2.out" }, 0.55)
+        .to(targets[1], { opacity: 1, y: 0, duration: 0.75, ease: "power2.out" }, 0.68)
+        .to(targets[2], { opacity: 1, y: 0, duration: 0.65, ease: "power2.out" }, 1.05)
+        .to(targets[3], { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", clearProps: "opacity,transform" }, 1.3);
+      let started = false;
+      const reveal = () => { if (!started) { started = true; entrance.play(); } };
+      stopHero = startHero(canvas.current!, reveal);
+      // Content remains available if the artwork is slow or unavailable.
+      const fallback = window.setTimeout(reveal, 2500);
+      return () => { clearTimeout(fallback); stopHero?.(); };
+    }, hero);
+    media.add("(prefers-reduced-motion: reduce)", () => startHero(canvas.current!));
+    return () => { media.revert(); stopHero?.(); };
+  }, []);
   return (
     <>
       <a className="skip-link" href="#main">
@@ -19,7 +41,7 @@ export function Landing() {
       <header>
         <Wordmark />
       </header>
-      <main id="main" className="hero">
+      <main ref={hero} id="main" className="hero">
         <h1>
           <span>Built to be understood.</span>
           <span>Designed to be chosen.</span>
@@ -56,49 +78,47 @@ function ContactFooter() {
       img = poster.current!,
       el = wrapper.current!,
       reduce = matchMedia("(prefers-reduced-motion: reduce)");
-    let finished = false,
-      visible = false;
+    let finished = false, started = false, visible = false, disposed = false;
     const showPoster = () => {
-      v.hidden = true;
+      v.style.visibility = "hidden";
       img.hidden = false;
+      el.dataset.playback = "finished";
     };
     const play = () => {
-      if (!finished && !reduce.matches && !document.hidden) {
-        v.hidden = false;
-        img.hidden = true;
-        v.play().catch(showPoster);
-      }
+      if (disposed || finished || reduce.matches || document.hidden) return;
+      started = true;
+      el.dataset.playback = "playing";
+      // Reveal only once decoded data is available; never flash the final wordmark.
+      v.play().then(() => {
+        if (!disposed && !finished) { v.style.visibility = "visible"; img.hidden = true; }
+      }).catch(() => { if (!disposed) { finished = true; showPoster(); } });
     };
     const onReduce = () => {
-      if (reduce.matches) {
-        v.pause();
-        showPoster();
-      } else if (visible) play();
+      if (reduce.matches) { finished = true; v.pause(); showPoster(); }
     };
-    const end = () => {
-      finished = true;
-      showPoster();
-    };
+    const end = () => { finished = true; showPoster(); };
     const visibility = () => {
       if (document.hidden) v.pause();
-      else if (visible) play();
+      else if (started && !finished) play();
     };
-    const observer = new IntersectionObserver(
-      (e) => {
-        visible = e[0].isIntersecting;
-        if (visible) play();
-        else v.pause();
-      },
-      { threshold: 0.35 },
-    );
+    const ready = () => { if (visible && !started) play(); };
+    const observer = new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting && entries[0].intersectionRatio >= 0.35;
+      if (visible && !started && v.readyState >= 2) play();
+      // Once started, scrolling does not pause or restart the sign-off.
+    }, { threshold: [0, 0.35] });
+    el.dataset.playback = "waiting";
     observer.observe(el);
+    v.addEventListener("loadeddata", ready);
     v.addEventListener("ended", end);
     reduce.addEventListener("change", onReduce);
     document.addEventListener("visibilitychange", visibility);
-    if (reduce.matches) showPoster();
+    if (reduce.matches) { finished = true; showPoster(); }
     return () => {
+      disposed = true;
       observer.disconnect();
       v.pause();
+      v.removeEventListener("loadeddata", ready);
       v.removeEventListener("ended", end);
       reduce.removeEventListener("change", onReduce);
       document.removeEventListener("visibilitychange", visibility);
@@ -133,8 +153,8 @@ function ContactFooter() {
           ref={film}
           muted
           playsInline
-          preload="none"
-          poster="/assets/footer-complete-m-v22.webp"
+          preload="auto"
+          style={{ visibility: "hidden" }}
           aria-hidden="true"
         >
           <source src="/assets/footer-complete-m-v22.mp4" type="video/mp4" />
