@@ -1,0 +1,5 @@
+project_id = "small-design"
+[functions.intake]
+verify_jwt = false
+[functions.process-leads]
+verify_jwt = false
