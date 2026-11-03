@@ -185,7 +185,10 @@ export function Diagnostic() {
       setScreen("success");
     } catch (e) {
       if (e instanceof IntakeError && e.status === 409)
-        identity.current = { signature: "", id: "" };
+        identity.current = {
+          signature: JSON.stringify(lead),
+          id: crypto.randomUUID(),
+        };
       setStatus(
         e instanceof Error && e.name === "TimeoutError"
           ? "We could not confirm receipt. Retry with the same details; your request will not be duplicated."
