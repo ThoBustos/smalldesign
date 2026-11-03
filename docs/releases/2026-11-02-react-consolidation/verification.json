@@ -1,11 +1,9 @@
 {
   "backend_test": {
-    "submission_id": "d5538de9-dc24-4a78-892f-e44fe280c039",
-    "attio_record_id": "d8e39f6a-16bf-4eb9-b608-ef7436af8880",
     "worker_state": "done",
     "attempts": 1,
-    "webhook_delivered_at_utc": "2026-11-03T03:02:03.2408Z",
-    "phone_receipt": "confirmed by Thomas in chat"
+    "notification_webhook": "delivered",
+    "phone_receipt": "confirmed by user"
   },
   "mobile": [
     {
@@ -37,5 +35,37 @@
   "backend_tests_passed": 10,
   "react_typescript_build": "passed",
   "lint": "passed",
-  "protected_browser_submission": "pending production hostname verification"
+  "protected_browser_submission": {
+    "status": "passed on production with real Turnstile",
+    "attio_record": "created",
+    "worker_state": "done",
+    "attempts": 1,
+    "last_error": null,
+    "notification_webhook": "delivered"
+  },
+  "deployment": {
+    "url": "https://small.design",
+    "canonical_repository": "https://github.com/ThoBustos/smalldesign",
+    "branch": "main",
+    "release_command": "npm run deploy:production",
+    "git_auto_deploy": "not connected"
+  },
+  "ci": {
+    "status": "passed",
+    "release_checks": 12,
+    "accessibility_checks": 2,
+    "browsers": [
+      "Chromium",
+      "WebKit"
+    ]
+  },
+  "production_mobile": {
+    "viewport": [
+      375,
+      667
+    ],
+    "horizontal_overflow": false,
+    "hero_phase": "idle",
+    "physical_iphone_test": false
+  }
 }
