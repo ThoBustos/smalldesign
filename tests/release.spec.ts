@@ -42,7 +42,7 @@ test("diagnostic validates, reviews and preserves edits", async ({ page }) => {
   await page.getByText("Starting from scratch", { exact: true }).click();
   await page.getByText("Brand", { exact: true }).click();
   await page.getByText("A clearer story", { exact: true }).click();
-  await page.getByRole("radio", { name: "Founder / CEO", exact: true }).check();
+  await page.getByText("Founder / CEO", { exact: true }).click();
   await page.getByRole("button", { name: "Review my request" }).click();
   await expect(
     page.getByRole("heading", { name: "Your starting point." }),
