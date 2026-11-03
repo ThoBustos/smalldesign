@@ -6,9 +6,10 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["dist", "node_modules", "screenshots", "vite.config.js", "vite.config.d.ts"],
+    ignores: ["docs/archives/**", "dist", "node_modules", "screenshots", "vite.config.js", "vite.config.d.ts"],
   },
   js.configs.recommended,
+  {files:["supabase/**"],languageOptions:{globals:{Deno:"readonly"}}},
   ...tseslint.configs.recommended,
   {
     languageOptions: {
