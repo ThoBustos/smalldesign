@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 type DiagnosticEvent =
   | "small_landing_viewed"
   | "small_diagnostic_clicked"
