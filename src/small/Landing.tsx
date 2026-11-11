@@ -1,3 +1,4 @@
+import { captureDiagnosticEvent } from "./analytics";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { startHero } from "./hero-motion";
@@ -57,7 +58,7 @@ export function Landing() {
             the product people use, we help every part of your company tell the
             same story and work toward the same goal.
           </p>
-          <a className="text-action diagnostic" href="/diagnostic">
+          <a className="text-action diagnostic" href="/diagnostic" onClick={() => captureDiagnosticEvent("small_diagnostic_clicked")}>
             <span className="action-label">Request your Small Diagnostic</span>
             <span aria-hidden="true">↗</span>
           </a>
