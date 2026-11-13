@@ -36,3 +36,9 @@ React form → Turnstile-protected Supabase intake → transactional submission/
 ## Visual history
 
 The prior React design remains under docs/archives/2026-11-02-react-v1 and Git history. Native AE projects and earlier drawing experiments remain in the separate v2 design archive; only selected runtime assets are shipped here.
+
+### Diagnostic analytics
+
+Set `VITE_POSTHOG_PROJECT_TOKEN` to the public project token for Small Design in the US PostHog workspace and rebuild production. Events are sent only from `small.design`. The capture endpoint receives an anonymous ID scoped to the browser tab, event names and optional campaign slugs (`utm_source`, `utm_medium`, `utm_campaign`). Use campaign slugs such as `linkedin`, `outreach` and `small-launch`. Keep recipient identifiers out of campaign tags.
+
+In PostHog, create an ordered funnel with `small_landing_viewed`, `small_diagnostic_clicked` and `small_diagnostic_submitted`. A submission is counted after intake confirms receipt. Verify the funnel in Live Events using one tagged production visit and a marked test request, then exclude that test campaign from reporting.

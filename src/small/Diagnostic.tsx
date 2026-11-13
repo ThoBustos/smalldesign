@@ -1,3 +1,4 @@
+import { captureDiagnosticEvent } from "./analytics";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Wordmark } from "./Landing";
 import { IdleCompanion } from "./IdleCompanion";
@@ -181,6 +182,7 @@ export function Diagnostic() {
     setStatus("Sending your request…");
     try {
       await sendLead(lead, identity.current.id, token);
+      captureDiagnosticEvent("small_diagnostic_submitted");
       setSubmittedId(identity.current.id);
       setScreen("success");
     } catch (e) {

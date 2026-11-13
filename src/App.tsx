@@ -1,8 +1,12 @@
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { Landing } from "./small/Landing";
 import { Diagnostic } from "./small/Diagnostic";
+import { captureDiagnosticEvent } from "./small/analytics";
 export default function App() {
   const diagnostic = location.pathname.replace(/\/$/, "") === "/diagnostic";
+  useEffect(() => {
+    if (location.pathname === "/") captureDiagnosticEvent("small_landing_viewed");
+  }, []);
   useLayoutEffect(() => {
     document.body.classList.toggle("diagnostic-page", diagnostic);
     document.title = diagnostic
