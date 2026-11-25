@@ -33,6 +33,12 @@
       "permanent": true
     },
     {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "smalldesign.vercel.app" }],
+      "destination": "https://small.design/:path*",
+      "permanent": true
+    },
+    {
       "source": "/diagnostic.html",
       "destination": "/diagnostic",
       "permanent": true

@@ -72,15 +72,20 @@ test("CSP allows PostHog connections without a remote script", () => {
   assert.equal(connect?.includes("https://fpmppovrpnupoqlexaya.supabase.co"), true);
 });
 
-test("www redirects permanently to the apex and keeps path and query", () => {
-  const redirect = vercel.redirects.find((rule) =>
-    rule.has?.some((condition) => condition.value === "www.small.design"),
+test("alias hosts redirect permanently to the apex and keep path and query", () => {
+  for (const host of ["www.small.design", "smalldesign.vercel.app"]) {
+    const redirect = vercel.redirects.find((rule) => rule.has?.some((condition) => condition.value === host));
+    assert.ok(redirect, host);
+    assert.equal(redirect.permanent, true);
+    assert.equal(redirect.source, "/:path*");
+    assert.equal(redirect.destination, "https://small.design/:path*");
+    assert.equal(redirect.destination.includes("?"), false);
+    assert.equal(redirect.has?.length, 1);
+  }
+  assert.equal(
+    vercel.redirects.some((rule) => rule.has?.some((condition) => condition.value.includes("*"))),
+    false,
   );
-  assert.ok(redirect);
-  assert.equal(redirect.permanent, true);
-  assert.equal(redirect.source, "/:path*");
-  assert.equal(redirect.destination, "https://small.design/:path*");
-  assert.equal(redirect.destination.includes("?"), false);
   assert.equal(
     vercel.redirects.some(
       (rule) => rule.source === "/diagnostic.html" && rule.destination === "/diagnostic" && rule.permanent === true,

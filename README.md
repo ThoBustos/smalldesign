@@ -43,7 +43,7 @@ Analytics is the bundled `posthog-js` package. The build aliases `posthog-js/no-
 
 Set `VITE_POSTHOG_PROJECT_TOKEN` to the public US project token and rebuild. The token is meant to be in the browser bundle. Leave it blank to disable capture. Production Vercel already provides this variable.
 
-Capture runs only on `small.design` and `www.small.design`. Preview deployments and localhost do not send events. `www.small.design` permanently redirects to `https://small.design`, keeping the path and query string. The www hostname remains in the allowlist for any response that is still served there.
+Capture runs only on `small.design` and `www.small.design`. Preview deployments and localhost do not send events. `www.small.design` and `smalldesign.vercel.app` permanently redirect to `https://small.design`, keeping the path and query string. The www hostname remains in the allowlist for any response that is still served there. Other `*.vercel.app` preview hosts are left in place.
 
 The client uses `api_host` `https://us.i.posthog.com`, `person_profiles: 'identified_only'`, `persistence: 'localStorage+cookie'`, automatic pageviews and pageleaves, and PostHog's default IP and geo capture. Autocapture, rageclicks, and session recording are off. The distinct id is stored in localStorage and a cookie.
 
