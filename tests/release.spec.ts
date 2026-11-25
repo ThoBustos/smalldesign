@@ -32,6 +32,35 @@ for (const [width, height] of [
     await expect(page.locator(".footer-motion img")).toBeVisible();
   });
 }
+test("landing keeps the static crawler description", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    "content",
+    "Built to be understood. Designed to be chosen. Small connects positioning, brand, websites and products through senior design partnership.",
+  );
+  await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
+    "content",
+    "Senior design partnership across positioning, brand, websites and products.",
+  );
+});
+test("branded not-found page is served", async ({ page }) => {
+  const response = await page.goto("/404.html");
+  expect(response?.ok()).toBeTruthy();
+  await expect(
+    page.getByRole("heading", { name: "This page is not on Small." }),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Back to Small" })).toHaveAttribute(
+    "href",
+    "/",
+  );
+});
+test("unknown paths use the branded not-found page", async ({ page }) => {
+  const response = await page.goto("/does-not-exist");
+  expect(response?.status()).toBe(404);
+  await expect(
+    page.getByRole("heading", { name: "This page is not on Small." }),
+  ).toBeVisible();
+});
 test("diagnostic validates, reviews and preserves edits", async ({ page }) => {
   await page.goto("/diagnostic");
   await page.getByRole("button", { name: "Review my request" }).click();
@@ -46,6 +75,11 @@ test("diagnostic validates, reviews and preserves edits", async ({ page }) => {
   await page.getByRole("button", { name: "Review my request" }).click();
   await expect(
     page.getByRole("heading", { name: "Your starting point." }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      "Your name, email, website and answers are stored so Small can reply to this request.",
+    ),
   ).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Send my request" }),
@@ -64,6 +98,14 @@ test("clean diagnostic has route metadata and an accessible mobile form", async 
   await expect(page.locator("link[rel=canonical]")).toHaveAttribute(
     "href",
     "https://small.design/diagnostic",
+  );
+  await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
+    "content",
+    "Request your Small Diagnostic: a focused review of your brand, website and product, with clear priorities for what comes next.",
+  );
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    "content",
+    "Request your Small Diagnostic: a focused review of your brand, website and product, with clear priorities for what comes next.",
   );
   expect(
     await page.evaluate(

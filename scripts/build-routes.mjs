@@ -17,6 +17,10 @@ html = html
   .replace(
     /(<meta property="og:title" content=")[^"]*(")/,
     "$1Your diagnostic — Small$2",
+  )
+  .replace(
+    /(<meta property="og:description" content=")[^"]*(")/,
+    "$1Request your Small Diagnostic: a focused review of your brand, website and product, with clear priorities for what comes next.$2",
   );
 await mkdir("dist/diagnostic", { recursive: true });
 await writeFile("dist/diagnostic/index.html", html);

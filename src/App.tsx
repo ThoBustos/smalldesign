@@ -9,32 +9,6 @@ export default function App() {
   }, []);
   useLayoutEffect(() => {
     document.body.classList.toggle("diagnostic-page", diagnostic);
-    document.title = diagnostic
-      ? "Your diagnostic — Small"
-      : "Small — Brand, website & product design";
-    const description = diagnostic
-      ? "Request your Small Diagnostic: a focused review of your brand, website and product, with clear priorities for what comes next."
-      : "Independent design studio connecting positioning, brand, websites and products.";
-    document
-      .querySelector('meta[name="description"]')
-      ?.setAttribute("content", description);
-    document
-      .querySelector('link[rel="canonical"]')
-      ?.setAttribute(
-        "href",
-        "https://small.design" + (diagnostic ? "/diagnostic" : "/"),
-      );
-    for (const property of ["og:url", "og:title", "og:description"])
-      document
-        .querySelector(`meta[property="${property}"]`)
-        ?.setAttribute(
-          "content",
-          property === "og:url"
-            ? location.origin + (diagnostic ? "/diagnostic" : "/")
-            : property === "og:title"
-              ? document.title
-              : description,
-        );
     const theme = matchMedia("(prefers-color-scheme: dark)");
     const update = () =>
       document
