@@ -13,7 +13,13 @@ export default defineConfig(({ mode }) => {
     throw Error("Intake endpoint must use HTTPS.");
   return {
     plugins: [react()],
-    resolve: { alias: { "@": path.resolve(__dirname, "./src") } },
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+        // Same typed entry as posthog-js/no-external, without surveys, replay, or remote scripts.
+        "posthog-js/no-external": path.resolve(__dirname, "node_modules/posthog-js/dist/module.slim.no-external.js"),
+      },
+    },
     define: { __INTAKE_CONFIG__: JSON.stringify({ endpoint, siteKey }) },
   };
 });

@@ -39,6 +39,20 @@ The prior React design remains under docs/archives/2026-11-02-react-v1 and Git h
 
 ### Diagnostic analytics
 
-Set `VITE_POSTHOG_PROJECT_TOKEN` to the public project token for Small Design in the US PostHog workspace and rebuild production. Events are sent only from `small.design`. The capture endpoint receives an anonymous ID scoped to the browser tab, event names and optional campaign slugs (`utm_source`, `utm_medium`, `utm_campaign`). Use campaign slugs such as `linkedin`, `outreach` and `small-launch`. Keep recipient identifiers out of campaign tags.
+Analytics is the bundled `posthog-js` package. The build aliases `posthog-js/no-external` to the slim build that does not request a PostHog script. `script-src` stays `'self'` plus the Cloudflare Turnstile host. `connect-src` allows `https://us.i.posthog.com` for events and `https://us-assets.i.posthog.com` for the remote config JSON.
 
-In PostHog, create an ordered funnel with `small_landing_viewed`, `small_diagnostic_clicked` and `small_diagnostic_submitted`. A submission is counted after intake confirms receipt. Verify the funnel in Live Events using one tagged production visit and a marked test request, then exclude that test campaign from reporting.
+Set `VITE_POSTHOG_PROJECT_TOKEN` to the public US project token and rebuild. The token is meant to be in the browser bundle. Leave it blank to disable capture. Production Vercel already provides this variable.
+
+Capture runs only on `small.design` and `www.small.design`. Preview deployments and localhost do not send events. `www.small.design` permanently redirects to `https://small.design`, keeping the path and query string. The www hostname remains in the allowlist for any response that is still served there.
+
+The client uses `api_host` `https://us.i.posthog.com`, `person_profiles: 'identified_only'`, `persistence: 'localStorage+cookie'`, automatic pageviews and pageleaves, and PostHog's default IP and geo capture. Autocapture, rageclicks, and session recording are off. The distinct id is stored in localStorage and a cookie.
+
+Custom events are unchanged:
+
+- `small_landing_viewed` on `/`
+- `small_diagnostic_clicked` when the diagnostic CTA is clicked, sent with `sendBeacon` and immediate dispatch so the request survives navigation
+- `small_diagnostic_submitted` after intake confirms receipt
+
+PostHog attaches `$referrer`, `$referring_domain`, and the initial referrer, plus `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, and `utm_term` when those parameters are in the URL. Use campaign slugs such as `linkedin`, `outreach`, and `small-launch`. Keep recipient identifiers out of campaign tags.
+
+In PostHog, the ordered funnel is `small_landing_viewed`, `small_diagnostic_clicked`, and `small_diagnostic_submitted`. `$pageview` is captured as well. A submission is counted after intake confirms receipt. Verify the funnel in Live Events with one tagged production visit and a marked test request, then exclude that test campaign from reporting.
