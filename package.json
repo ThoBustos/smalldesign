@@ -11,7 +11,7 @@
     "test:accessibility": "playwright test tests/accessibility.spec.ts",
     "brand:gemini": "node scripts/generate-small-design-brand-gemini.mjs",
     "screenshots": "npm run build && node scripts/screenshots.mjs",
-    "test:intake": "node --test tests/intake*.mjs",
+    "test:intake": "node --test tests/intake*.mjs && node --experimental-strip-types --test tests/analytics.test.ts",
     "test:release": "playwright test tests/release.spec.ts",
     "deploy:production": "node scripts/deploy-production.mjs"
   },
@@ -21,6 +21,7 @@
     "clsx": "^2.1.1",
     "gsap": "^3.15.0",
     "lucide-react": "^0.468.0",
+    "posthog-js": "^1.454.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^2.6.0"

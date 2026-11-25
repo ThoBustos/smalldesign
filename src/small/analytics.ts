@@ -1,61 +1,48 @@
 /// <reference types="vite/client" />
+import posthog from "posthog-js/no-external";
+import {
+  analyticsToken,
+  captureOptions,
+  isTrackedHost,
+  type DiagnosticEvent,
+} from "./analytics-policy";
 
-type DiagnosticEvent =
-  | "small_landing_viewed"
-  | "small_diagnostic_clicked"
-  | "small_diagnostic_submitted";
+const projectToken = analyticsToken(import.meta.env.VITE_POSTHOG_PROJECT_TOKEN);
 
-const projectToken = import.meta.env.VITE_POSTHOG_PROJECT_TOKEN?.trim();
-const endpoint = "https://us.i.posthog.com/i/v0/e/";
-const sessionKey = "small-analytics-session";
-const campaignKeys = ["utm_source", "utm_medium", "utm_campaign"] as const;
-
+let started = false;
 let landingCaptured = false;
 
-export function captureDiagnosticEvent(event: DiagnosticEvent) {
-  if (!projectToken?.startsWith("phc_") || location.hostname !== "small.design")
-    return;
-
-  if (event === "small_landing_viewed" && landingCaptured) return;
-
+export function initAnalytics() {
+  if (started || !projectToken || !isTrackedHost(location.hostname)) return;
   try {
-    const saved = sessionStorage.getItem(sessionKey);
-    const session = saved
-      ? (JSON.parse(saved) as { id: string; campaign: Record<string, string> })
-      : { id: crypto.randomUUID(), campaign: {} };
-    const query = new URLSearchParams(location.search);
-    for (const key of campaignKeys) {
-      const value = query.get(key);
-      if (!session.campaign[key] && value && /^[a-z0-9_-]{1,64}$/i.test(value))
-        session.campaign[key] = value;
-    }
-    sessionStorage.setItem(sessionKey, JSON.stringify(session));
-    if (event === "small_landing_viewed") landingCaptured = true;
-
-    const body = JSON.stringify({
-      api_key: projectToken,
-      event,
-      properties: {
-        distinct_id: session.id,
-        $process_person_profile: false,
-        $ip: null,
-        $geoip_disable: true,
-        ...session.campaign,
-      },
+    posthog.init(projectToken, {
+      api_host: "https://us.i.posthog.com",
+      person_profiles: "identified_only",
+      persistence: "localStorage+cookie",
+      capture_pageview: true,
+      capture_pageleave: true,
+      autocapture: false,
+      rageclick: false,
+      disable_session_recording: true,
+      // Remote scripts would violate script-src 'self'. Config is still fetched as JSON.
+      disable_external_dependency_loading: true,
     });
-
-    if (event === "small_diagnostic_clicked" && navigator.sendBeacon?.(endpoint, body))
-      return;
-
-    void fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain" },
-      credentials: "omit",
-      referrerPolicy: "no-referrer",
-      keepalive: true,
-      body,
-    }).catch(() => {});
+    started = true;
   } catch {
-    // Analytics is optional when browser storage or capture is unavailable.
+    // Analytics is optional and must not block the page.
+  }
+}
+
+export function captureDiagnosticEvent(event: DiagnosticEvent) {
+  if (!started) initAnalytics();
+  if (!started) return;
+  if (event === "small_landing_viewed") {
+    if (landingCaptured) return;
+    landingCaptured = true;
+  }
+  try {
+    posthog.capture(event, undefined, captureOptions(event));
+  } catch {
+    // Analytics is optional when capture is unavailable.
   }
 }
