@@ -386,6 +386,10 @@ export function Diagnostic() {
               <p id="submit-status" role="status" aria-live="polite">
                 {status}
               </p>
+              <p className="privacy-notice">
+                Your name, email, website and answers are stored so Small can
+                reply to this request.
+              </p>
               <button
                 type="button"
                 className="send-email"
