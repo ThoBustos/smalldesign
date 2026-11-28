@@ -39,6 +39,8 @@ test("translated Spanish labels fit the mobile landing", async ({ page }) => {
   await expect(headline).toHaveAttribute("translate", "no");
   await expect(wordmark).toHaveAttribute("translate", "no");
   await expect(page.locator(".signature-home")).toHaveAttribute("translate", "no");
+  await expect(page.locator(".wordmark-scene-caption")).toHaveAttribute("translate", "no");
+  await expect(page.getByRole("heading", { name: "Something on your mind?" })).toHaveAttribute("translate", "no");
 
   const metrics = await page.evaluate(() => {
     const translations = {
