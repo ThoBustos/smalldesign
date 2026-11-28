@@ -42,7 +42,7 @@ export function ContactFooter() {
   return (
     <section ref={footer} className="contact-footer contact-footer-proof" id="next" aria-labelledby="contact-title">
       <div className="contact-copy">
-        <h2 id="contact-title">
+        <h2 id="contact-title" lang="en" translate="no">
           <span>Something</span>{" "}
           <span>on your</span>{" "}
           <span>mind?</span>
@@ -142,7 +142,7 @@ export function WordmarkScene() {
   }, []);
   return (
     <section className="wordmark-scene wordmark-scene-reverse-type" id="work" data-caption="journey" aria-labelledby="wordmark-scene-title">
-      <div className="wordmark-scene-caption">
+      <div className="wordmark-scene-caption" lang="en" translate="no">
         <h2 id="wordmark-scene-title">From pitch to product.</h2>
         <p>From product to market.</p>
       </div>
