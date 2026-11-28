@@ -30,6 +30,60 @@ for (const [width, height] of [
     await expect(page.locator(".footer-motion img")).toBeVisible();
   });
 }
+test("translated Spanish labels fit the mobile landing", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const headline = page.getByRole("heading", { name: "Design for ROI" });
+  const wordmark = page.getByRole("link", { name: "Small home" });
+  await expect(headline).toHaveAttribute("translate", "no");
+  await expect(wordmark).toHaveAttribute("translate", "no");
+  await expect(page.locator(".signature-home")).toHaveAttribute("translate", "no");
+
+  const metrics = await page.evaluate(() => {
+    const translations = {
+      Work: "Trabajo",
+      Studio: "Estudio",
+      Contact: "Contacto",
+      "Small team, big work": "Equipo pequeño, gran trabajo.",
+      "Request your Small Diagnostic": "Solicita tu diagnóstico de Small",
+      "Scroll to explore": "Desplázate para explorar",
+    };
+    document.documentElement.lang = "es";
+    const translatable = document.querySelectorAll<HTMLElement>(
+      ".landing-header nav .hero-roll-track > span, .hero-concept-intro p, .hero-concept-actions .hero-roll-track > span",
+    );
+    let translated = 0;
+    for (const label of translatable) {
+      const text = translations[label.textContent as keyof typeof translations];
+      if (label.translate && text) {
+        label.textContent = text;
+        translated += 1;
+      }
+    }
+    document.querySelector<HTMLElement>(".hero-concept-copy")!.textContent =
+      "Somos Small, un estudio de diseño independiente. Desde tu posicionamiento hasta el producto que la gente usa, te ayudamos a contar la misma historia y a trabajar hacia el mismo objetivo.";
+
+    const brand = document.querySelector(".landing-header .brand")!.getBoundingClientRect();
+    const nav = document.querySelector(".landing-header nav")!.getBoundingClientRect();
+    return {
+      translated,
+      navFits: brand.right <= nav.left && nav.right <= innerWidth,
+      ctasFit: Array.from(document.querySelectorAll(".hero-concept-actions a")).every(link => {
+        const bounds = link.getBoundingClientRect();
+        return bounds.left >= 0 && bounds.right <= innerWidth;
+      }),
+      noHorizontalOverflow: document.documentElement.scrollWidth <= innerWidth,
+    };
+  });
+  expect(metrics).toEqual({
+    translated: 11,
+    navFits: true,
+    ctasFit: true,
+    noHorizontalOverflow: true,
+  });
+});
+
 test("mobile wordmark shows a fallback and can play after autoplay is blocked", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.emulateMedia({ reducedMotion: "no-preference" });

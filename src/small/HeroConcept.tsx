@@ -48,7 +48,7 @@ export function HeroConcept({
     <section className="hero hero-concept hero-concept-spine" aria-labelledby="landing-title">
       <div className="hero-concept-intro">
         <p>Small team, big work</p>
-        <h1 ref={title} id="landing-title"><span>Design</span>{" "}<em>for</em>{" "}<span>ROI</span></h1>
+        <h1 ref={title} id="landing-title" lang="en" translate="no"><span>Design</span>{" "}<em>for</em>{" "}<span>ROI</span></h1>
       </div>
       {scene}
       <p id="studio" className="hero-concept-copy">{studioCopy}</p>
