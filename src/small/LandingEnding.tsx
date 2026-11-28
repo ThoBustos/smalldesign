@@ -112,10 +112,10 @@ export function WordmarkScene() {
     };
   }, []);
   return (
-    <section className="wordmark-scene wordmark-scene-reverse-type" id="work" data-caption="adoption" aria-labelledby="wordmark-scene-title">
+    <section className="wordmark-scene wordmark-scene-reverse-type" id="work" data-caption="journey" aria-labelledby="wordmark-scene-title">
       <div className="wordmark-scene-caption">
-        <h2 id="wordmark-scene-title">How they find it.</h2>
-        <p>Why they stay.</p>
+        <h2 id="wordmark-scene-title">From pitch to product.</h2>
+        <p>From product to market.</p>
       </div>
       <figure ref={wrapper} className="footer-motion">
         <div className="footer-motion-media">

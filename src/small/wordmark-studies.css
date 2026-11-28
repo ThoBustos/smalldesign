@@ -63,15 +63,14 @@
   text-transform: uppercase;
 }
 
-.wordmark-scene-reverse-type[data-caption="adoption"] .wordmark-scene-caption {
+.wordmark-scene-reverse-type[data-caption="journey"] .wordmark-scene-caption {
   align-self: stretch;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr);
-  font-family: "Instrument Sans", sans-serif;
 }
 
-.wordmark-scene-reverse-type[data-caption="adoption"] .wordmark-scene-caption :is(h2, p) {
+.wordmark-scene-reverse-type[data-caption="journey"] .wordmark-scene-caption :is(h2, p) {
   grid-area: 1 / 1;
   justify-self: start;
   align-self: start;
@@ -82,7 +81,7 @@
   white-space: nowrap;
 }
 
-.wordmark-scene-reverse-type[data-caption="adoption"] .wordmark-scene-caption p {
+.wordmark-scene-reverse-type[data-caption="journey"] .wordmark-scene-caption p {
   justify-self: end;
   align-self: end;
 }
