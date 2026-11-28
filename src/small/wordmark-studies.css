@@ -81,6 +81,10 @@
   white-space: nowrap;
 }
 
+.wordmark-scene-reverse-type[data-caption="journey"] .wordmark-scene-caption h2 {
+  rotate: 180deg;
+}
+
 .wordmark-scene-reverse-type[data-caption="journey"] .wordmark-scene-caption p {
   justify-self: end;
   align-self: end;
