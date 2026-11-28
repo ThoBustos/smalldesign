@@ -58,57 +58,86 @@ export function ContactFooter() {
 
 export function WordmarkScene() {
   const film = useRef<HTMLVideoElement>(null);
-  const poster = useRef<HTMLImageElement>(null);
   const wrapper = useRef<HTMLElement>(null);
+  const playButton = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
-    const v = film.current!,
-      img = poster.current!,
-      el = wrapper.current!,
-      reduce = matchMedia("(prefers-reduced-motion: reduce)");
-    let finished = false, started = false, visible = false, disposed = false;
-    const showPoster = () => {
-      v.style.visibility = "hidden";
-      img.hidden = false;
-      el.dataset.playback = "finished";
-    };
-    const play = () => {
-      if (disposed || finished || reduce.matches || document.hidden) return;
-      started = true;
-      el.dataset.playback = "playing";
-      // Reveal only once decoded data is available; never flash the final wordmark.
-      v.play().then(() => {
-        if (!disposed && !finished) { v.style.visibility = "visible"; img.hidden = true; }
-      }).catch(() => { if (!disposed) { finished = true; showPoster(); } });
+    const video = film.current!;
+    const panel = wrapper.current!;
+    const button = playButton.current!;
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+    let visible = false;
+    let attempt = 0;
+    let timeout = 0;
+
+    function setPlayback(state: "waiting" | "loading" | "playing" | "blocked" | "finished") {
+      panel.dataset.playback = state;
+      window.clearTimeout(timeout);
+    }
+
+    function stop(state: "waiting" | "blocked" | "finished") {
+      attempt += 1;
+      video.pause();
+      setPlayback(state);
+    }
+
+    function play(manual = false) {
+      const state = panel.dataset.playback;
+      if (reduce.matches || document.hidden || state === "loading" || state === "finished") return;
+      if (!manual && (state === "blocked" || (!visible && state !== "playing"))) return;
+
+      const current = ++attempt;
+      const blocked = () => {
+        if (attempt === current) stop("blocked");
+      };
+      setPlayback("loading");
+      if (manual && video.error) video.load();
+      video.muted = true;
+      video.play().then(() => {
+        if (attempt === current) setPlayback("playing");
+      }, blocked);
+      timeout = window.setTimeout(blocked, 4000);
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting && entry.intersectionRatio >= .35;
+      if (panel.dataset.playback === "waiting") play();
+    }, { threshold: [.35] });
+
+    const playManually = () => play(true);
+    const finish = () => stop("finished");
+    const onError = () => {
+      if (panel.dataset.playback !== "finished") stop("blocked");
     };
     const onReduce = () => {
-      if (reduce.matches) { finished = true; v.pause(); showPoster(); }
+      if (reduce.matches) finish();
+      else {
+        setPlayback("waiting");
+        play();
+      }
     };
-    const end = () => { finished = true; showPoster(); };
-    const visibility = () => {
-      if (document.hidden) v.pause();
-      else if (started || (visible && v.readyState >= 2)) play();
+    const onVisibility = () => {
+      if (document.hidden) {
+        if (panel.dataset.playback === "loading") stop("waiting");
+        else video.pause();
+      } else if (panel.dataset.playback === "waiting" || panel.dataset.playback === "playing") play();
     };
-    const ready = () => { if (visible && !started) play(); };
-    const observer = new IntersectionObserver((entries) => {
-      visible = entries[0].isIntersecting && entries[0].intersectionRatio >= 0.35;
-      if (visible && !started && v.readyState >= 2) play();
-      // Once started, scrolling does not pause or restart the sign-off.
-    }, { threshold: [0, 0.35] });
-    el.dataset.playback = "waiting";
-    observer.observe(el);
-    v.addEventListener("loadeddata", ready);
-    v.addEventListener("ended", end);
+
+    setPlayback(reduce.matches ? "finished" : video.error ? "blocked" : "waiting");
+    observer.observe(panel);
+    button.addEventListener("click", playManually);
+    video.addEventListener("ended", finish);
+    video.addEventListener("error", onError);
     reduce.addEventListener("change", onReduce);
-    document.addEventListener("visibilitychange", visibility);
-    if (reduce.matches) { finished = true; showPoster(); }
+    document.addEventListener("visibilitychange", onVisibility);
     return () => {
-      disposed = true;
+      stop("waiting");
       observer.disconnect();
-      v.pause();
-      v.removeEventListener("loadeddata", ready);
-      v.removeEventListener("ended", end);
+      button.removeEventListener("click", playManually);
+      video.removeEventListener("ended", finish);
+      video.removeEventListener("error", onError);
       reduce.removeEventListener("change", onReduce);
-      document.removeEventListener("visibilitychange", visibility);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
   return (
@@ -124,21 +153,15 @@ export function WordmarkScene() {
             muted
             playsInline
             preload="auto"
-            style={{ visibility: "hidden" }}
+            src="/assets/footer-complete-m-v22.mp4"
             aria-hidden="true"
-          >
-            <source src="/assets/footer-complete-m-v22.mp4" type="video/mp4" />
-          </video>
-          <img
-            ref={poster}
-            src="/assets/footer-complete-m-v22.webp"
-            width="800"
-            height="587"
-            alt="Small"
-            hidden
           />
+          <div className="footer-motion-poster">
+            <img src="/assets/footer-complete-m-v22.webp" width="800" height="587" alt="Small" />
+          </div>
         </div>
       </figure>
+      <button className="wordmark-play" type="button" ref={playButton}>Play animation</button>
     </section>
   );
 }

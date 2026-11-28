@@ -100,3 +100,35 @@
     width: 86%;
   }
 }
+
+.footer-motion-poster {
+  position: absolute;
+  inset: 0;
+  background: white;
+}
+
+.footer-motion[data-playback="playing"] .footer-motion-poster {
+  visibility: hidden;
+}
+
+.wordmark-play {
+  display: none;
+  grid-area: 1 / 1;
+  place-self: center;
+  z-index: 2;
+  min-height: 44px;
+  padding: 0 15px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: #171714;
+  color: inherit;
+  font-size: .875rem;
+}
+
+.wordmark-scene:has(.footer-motion[data-playback="blocked"]) .wordmark-play {
+  display: block;
+}
+
+html[data-hero-pointer] .wordmark-play {
+  cursor: none;
+}

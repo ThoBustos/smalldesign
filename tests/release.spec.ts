@@ -30,6 +30,34 @@ for (const [width, height] of [
     await expect(page.locator(".footer-motion img")).toBeVisible();
   });
 }
+test("mobile wordmark shows a fallback and can play after autoplay is blocked", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.addInitScript(() => {
+    const play = HTMLMediaElement.prototype.play;
+    let blocked = false;
+    HTMLMediaElement.prototype.play = function () {
+      if (!blocked && this.closest(".footer-motion")) {
+        blocked = true;
+        return Promise.reject(new DOMException("Autoplay blocked", "NotAllowedError"));
+      }
+      return play.call(this);
+    };
+  });
+
+  await page.goto("/");
+  const panel = page.locator(".footer-motion");
+  const poster = panel.getByRole("img", { name: "Small" });
+  await expect(poster).toBeVisible();
+  await page.getByRole("link", { name: "Scroll to explore" }).click();
+  const playButton = page.getByRole("button", { name: "Play animation" });
+  await expect(playButton).toBeVisible();
+  await expect(poster).toBeVisible();
+  await playButton.click();
+  await expect(panel).toHaveAttribute("data-playback", "playing");
+  await expect(poster).toBeHidden();
+});
+
 test("diagnostic validates, reviews and preserves edits", async ({ page }) => {
   await page.goto("/diagnostic");
   await page.getByRole("button", { name: "Review my request" }).click();
