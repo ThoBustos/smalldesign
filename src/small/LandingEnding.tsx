@@ -157,7 +157,7 @@ export function WordmarkScene() {
             aria-hidden="true"
           />
           <div className="footer-motion-poster">
-            <img src="/assets/footer-complete-m-v22.webp" width="800" height="587" alt="Small" />
+            <img src="/assets/footer-complete-m-v22.webp" width="800" height="587" alt="Small" translate="no" />
           </div>
         </div>
       </figure>

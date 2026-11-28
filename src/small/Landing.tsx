@@ -8,7 +8,7 @@ import "./landing-hero.css";
 
 export function Wordmark() {
   return (
-    <a href="/" className="brand" aria-label="Small home">
+    <a href="/" className="brand" translate="no" aria-label="Small home">
       <span>small</span>
       <i aria-hidden="true" />
     </a>
@@ -52,7 +52,7 @@ export function Landing() {
       <footer>
         <ContactFooter />
         <div className="landing-signature signature-ink" id="signature">
-          <a href="#main" className="signature-home" aria-label="Small, back to top">
+          <a href="#main" className="signature-home" translate="no" aria-label="Small, back to top">
             <span className="signature-wordmark" aria-hidden="true">small<i /></span>
           </a>
           <nav className="signature-links" aria-label="Footer">
