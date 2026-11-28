@@ -21,8 +21,8 @@ for (const [width, height] of [
     expect(metrics.overflow).toBe(false);
     expect(metrics.ctaBottom).toBeLessThanOrEqual(height);
     await expect(page.getByRole("heading", { name: "Design for ROI" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "How they find it." })).toBeVisible();
-    await expect(page.getByText("Why they stay.")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "From pitch to product." })).toBeVisible();
+    await expect(page.getByText("From product to market.")).toBeVisible();
     await expect(page.locator(".footer-motion img")).toBeVisible();
   });
 }
