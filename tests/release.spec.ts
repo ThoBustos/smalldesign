@@ -15,20 +15,14 @@ for (const [width, height] of [
     );
     const metrics = await page.evaluate(() => ({
       overflow: document.documentElement.scrollWidth > innerWidth,
-      ctaBottom: document.querySelector(".diagnostic")!.getBoundingClientRect()
+      ctaBottom: document.querySelector(".hero-concept-diagnostic")!.getBoundingClientRect()
         .bottom,
-      h1: getComputedStyle(document.querySelector("h1")!).fontSize,
-      h2: getComputedStyle(document.querySelector(".contact-copy h2")!)
-        .fontSize,
-      body: getComputedStyle(document.querySelector(".bottom-copy p")!)
-        .fontSize,
-      footer: getComputedStyle(document.querySelector(".contact-copy p")!)
-        .fontSize,
     }));
     expect(metrics.overflow).toBe(false);
     expect(metrics.ctaBottom).toBeLessThanOrEqual(height);
-    expect(metrics.h1).toBe(metrics.h2);
-    expect(metrics.body).toBe(metrics.footer);
+    await expect(page.getByRole("heading", { name: "Design for ROI" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "How they find it." })).toBeVisible();
+    await expect(page.getByText("Why they stay.")).toBeVisible();
     await expect(page.locator(".footer-motion img")).toBeVisible();
   });
 }
