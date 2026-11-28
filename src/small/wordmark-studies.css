@@ -1,0 +1,99 @@
+.wordmark-scene-reverse-type {
+  --study-inset: clamp(18px, 3.5vw, 48px);
+}
+
+.wordmark-scene-reverse-type .footer-motion {
+  max-width: 1120px;
+  aspect-ratio: 2.15;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.wordmark-scene-reverse-type .wordmark-scene-caption {
+  margin: var(--study-inset);
+}
+
+.wordmark-scene-reverse-type .wordmark-scene-caption h2 {
+  font-size: clamp(20px, 2.7vw, 42px);
+  letter-spacing: -.055em;
+  line-height: 1.04;
+}
+
+.wordmark-scene-reverse-type .wordmark-scene-caption p {
+  margin-block-start: 6px;
+}
+
+.wordmark-scene-reverse-type {
+  grid-template-columns: minmax(0, 1120px);
+  justify-content: center;
+}
+
+.wordmark-scene-reverse-type {
+  color: #f8f7f2;
+}
+
+.wordmark-scene-reverse-type .footer-motion {
+  background: #171714;
+}
+
+.wordmark-scene-reverse-type .footer-motion-media {
+  inset: auto 31% 0 auto;
+  width: 69%;
+  /* The floor is at row 641 of the 800px-wide animation. */
+  aspect-ratio: 800 / 641;
+  mix-blend-mode: screen;
+  filter: invert(1);
+  opacity: .96;
+}
+
+.wordmark-scene-reverse-type .wordmark-scene-caption {
+  align-self: start;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: calc(100% - 2 * var(--study-inset));
+  gap: 8px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.wordmark-scene-reverse-type .wordmark-scene-caption :is(h2, p) {
+  margin: 0;
+  font-size: clamp(.675rem, 1.25vw, .95rem);
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+
+.wordmark-scene-reverse-type[data-caption="adoption"] .wordmark-scene-caption {
+  align-self: stretch;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  font-family: "Instrument Sans", sans-serif;
+}
+
+.wordmark-scene-reverse-type[data-caption="adoption"] .wordmark-scene-caption :is(h2, p) {
+  grid-area: 1 / 1;
+  justify-self: start;
+  align-self: start;
+  writing-mode: vertical-rl;
+  line-height: 1;
+  font-weight: 550;
+  letter-spacing: .07em;
+  white-space: nowrap;
+}
+
+.wordmark-scene-reverse-type[data-caption="adoption"] .wordmark-scene-caption p {
+  justify-self: end;
+  align-self: end;
+}
+
+@media (max-width: 700px) {
+  .wordmark-scene-reverse-type .footer-motion {
+    aspect-ratio: 1.36;
+  }
+
+  .wordmark-scene-reverse-type .footer-motion-media {
+    right: 26%;
+    width: 86%;
+  }
+}

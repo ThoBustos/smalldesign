@@ -1,0 +1,134 @@
+.wordmark-scene,
+.contact-footer {
+  --ending-gutter: max(24px, 5.5vw);
+  scroll-margin-top: 14px;
+}
+
+.wordmark-scene {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: min(100%, 1440px);
+  margin-inline: auto;
+  padding: clamp(64px, 9vw, 138px) var(--ending-gutter) clamp(50px, 7vw, 106px);
+}
+
+.wordmark-scene-caption {
+  grid-area: 1 / 1;
+  justify-self: start;
+  align-self: center;
+  z-index: 1;
+}
+
+.wordmark-scene-caption h2 {
+  margin: 0;
+  font-size: clamp(.875rem, 1.33vw, 1.3rem);
+  font-weight: 500;
+}
+
+.footer-motion {
+  position: relative;
+  grid-area: 1 / 1;
+  width: 100%;
+  max-width: min(73vw, 720px);
+  aspect-ratio: 800 / 720;
+  justify-self: center;
+  margin: 0;
+  pointer-events: none;
+}
+
+.footer-motion-media {
+  position: absolute;
+  inset: 0;
+}
+
+.footer-motion :is(video, img) {
+  position: absolute;
+  inset: 0 auto auto 0;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.contact-footer {
+  padding: clamp(56px, 9vw, 150px) var(--ending-gutter) clamp(76px, 11vw, 178px);
+}
+
+.contact-copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr);
+  align-items: end;
+  gap: 30px clamp(22px, 7vw, 120px);
+  max-width: 1440px;
+  margin-inline: auto;
+}
+
+.contact-copy h2 {
+  margin: 0;
+  font-size: clamp(42px, 8.45vw, 142px);
+  font-weight: 500;
+  letter-spacing: -.065em;
+  line-height: .97;
+}
+
+.contact-copy h2 span {
+  display: block;
+}
+
+.contact-details p {
+  margin: 0 0 10px;
+  font-size: var(--body);
+  line-height: 1.55;
+}
+
+.contact-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  min-height: 44px;
+}
+
+.contact-details .contact-email {
+  font-size: clamp(1rem, 2vw, 1.75rem);
+  letter-spacing: -.035em;
+}
+
+.contact-footer-proof .contact-copy {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  text-align: center;
+}
+
+.contact-footer-proof #contact-title span:last-child {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+}
+
+@media (max-width: 700px) {
+  .wordmark-scene {
+    padding-block: 56px 42px;
+  }
+
+  .wordmark-scene .footer-motion {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .wordmark-scene-caption {
+    align-self: start;
+  }
+
+  .wordmark-scene-caption h2 {
+    font-size: .85rem;
+  }
+
+  .contact-copy {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.wordmark-scene-caption p {
+  margin: 9px 0 0;
+  font-size: clamp(.875rem, 1.22vw, 1.13rem);
+  line-height: 1.4;
+}

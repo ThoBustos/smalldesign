@@ -1,0 +1,7 @@
+ @media (min-width: 980px) {
+  .landing-header.landing-header-quiet nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

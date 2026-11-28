@@ -112,6 +112,7 @@ export function startHero(canvas: HTMLCanvasElement, onUnfolded?: () => void, on
       walkDuration = (cx + size * 0.65) / speed,
       total = 7.3 + walkDuration + 0.35,
       seconds = reduced.matches ? 6 : (t / 1000) % total;
+
     let phase,
       x = cx,
       index = -1;
@@ -206,7 +207,7 @@ export function startHero(canvas: HTMLCanvasElement, onUnfolded?: () => void, on
   }
   function schedule() {
     draw();
-    if (!disposed && !raf && !document.hidden && !reduced.matches)
+    if (ready && !disposed && !raf && !document.hidden && !reduced.matches)
       raf = requestAnimationFrame(tick);
   }
   const observer = new ResizeObserver(() => {
